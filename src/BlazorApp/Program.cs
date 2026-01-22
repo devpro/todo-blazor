@@ -1,8 +1,7 @@
 ﻿using BlazorApp.Components;
 using BlazorApp.Components.Account;
 using BlazorApp.Data;
-using BlazorApp.Models;
-using BlazorApp.Services;
+using BlazorApp.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +37,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-builder.Services.AddScoped<TodoService>();
+builder.Services.AddScoped<TodoRepository>();
 
 var app = builder.Build();
 
