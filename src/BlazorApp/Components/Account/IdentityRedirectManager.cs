@@ -1,4 +1,4 @@
-﻿using BlazorApp.Data;
+﻿using BlazorApp.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 

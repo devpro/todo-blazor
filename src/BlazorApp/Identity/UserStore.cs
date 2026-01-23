@@ -7,11 +7,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 
-namespace BlazorApp.Data;
+namespace BlazorApp.Identity;
 
 /// <summary>
 /// Represents a new instance of a persistence store for users, using the default implementation

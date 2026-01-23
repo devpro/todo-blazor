@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 
-namespace BlazorApp.Data;
+namespace BlazorApp.Identity;
 
 /// <summary>
 /// Creates a new instance of a persistence store for roles.
