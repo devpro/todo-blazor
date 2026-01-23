@@ -2,7 +2,9 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="CONTRIBUTING.md" />
     <File Path="README.md" />
   </Folder>
   <Project Path="src/BlazorApp/BlazorApp.csproj" />
+  <Project Path="src/Common.MongoDb/Common.MongoDb.csproj" Id="c066cf9d-51d8-4a5f-aad6-3d62f3f9bc49" />
 </Solution>
