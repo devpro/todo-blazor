@@ -3,7 +3,6 @@ using System.Text.Json;
 using BlazorApp.Components.Account.Pages;
 using BlazorApp.Components.Account.Pages.Manage;
 using BlazorApp.Identity;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
-namespace Microsoft.AspNetCore.Routing
+namespace BlazorApp.Components.Account
 {
     internal static class IdentityComponentsEndpointRouteBuilderExtensions
     {
@@ -72,7 +71,7 @@ namespace Microsoft.AspNetCore.Routing
             var loggerFactory = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>();
             var downloadLogger = loggerFactory.CreateLogger("DownloadPersonalData");
 
-            manageGroup.MapPost("/DownloadPersonalData", async (
+            _ = manageGroup.MapPost("/DownloadPersonalData", async (
                 HttpContext context,
                 [FromServices] UserManager<ApplicationUser> userManager,
                 [FromServices] AuthenticationStateProvider authenticationStateProvider) =>
