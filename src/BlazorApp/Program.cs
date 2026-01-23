@@ -1,7 +1,7 @@
-﻿using BlazorApp.Components;
-using BlazorApp.Components.Account;
-using BlazorApp.Identity;
-using BlazorApp.Repositories;
+﻿using Devpro.TodoList.BlazorApp.Components;
+using Devpro.TodoList.BlazorApp.Components.Account;
+using Devpro.TodoList.BlazorApp.Identity;
+using Devpro.TodoList.BlazorApp.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

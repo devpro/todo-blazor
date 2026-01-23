@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 
-namespace BlazorApp.Identity;
+namespace Devpro.TodoList.BlazorApp.Identity;
 
 public class RoleStore<TRole>(ApplicationDbContext context, IdentityErrorDescriber? describer = null)
     : RoleStore<TRole, DbContext, ObjectId>(context, describer)

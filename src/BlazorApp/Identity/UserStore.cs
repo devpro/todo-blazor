@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 
-namespace BlazorApp.Identity;
+namespace Devpro.TodoList.BlazorApp.Identity;
 
 public class UserStore(ApplicationDbContext context, IdentityErrorDescriber? describer = null)
         : UserStore<ApplicationUser>(context, describer)

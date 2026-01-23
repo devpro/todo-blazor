@@ -1,7 +1,7 @@
-﻿using BlazorApp.Models;
+﻿using Devpro.TodoList.BlazorApp.Models;
 using MongoDB.Driver;
 
-namespace BlazorApp.Repositories;
+namespace Devpro.TodoList.BlazorApp.Repositories;
 
 public class TodoRepository
 {

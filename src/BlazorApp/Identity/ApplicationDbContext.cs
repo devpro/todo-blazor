@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace BlazorApp.Identity;
+namespace Devpro.TodoList.BlazorApp.Identity;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<ApplicationUser, IdentityRole<ObjectId>, ObjectId>(options)

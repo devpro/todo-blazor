@@ -1,8 +1,8 @@
-﻿using BlazorApp.Identity;
+﻿using Devpro.TodoList.BlazorApp.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace BlazorApp.Components.Account
+namespace Devpro.TodoList.BlazorApp.Components.Account
 {
     internal sealed class IdentityNoOpEmailSender : IEmailSender<ApplicationUser>
     {

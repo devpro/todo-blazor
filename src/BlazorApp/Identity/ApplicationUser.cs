@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 
-namespace BlazorApp.Identity;
+namespace Devpro.TodoList.BlazorApp.Identity;
 
 public class ApplicationUser : IdentityUser<ObjectId>
 {

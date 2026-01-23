@@ -1,8 +1,8 @@
-﻿using BlazorApp.Identity;
+﻿using Devpro.TodoList.BlazorApp.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 
-namespace BlazorApp.Components.Account
+namespace Devpro.TodoList.BlazorApp.Components.Account
 {
     internal sealed class IdentityRedirectManager(NavigationManager navigationManager)
     {

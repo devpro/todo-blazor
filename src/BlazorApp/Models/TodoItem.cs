@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BlazorApp.Models;
+namespace Devpro.TodoList.BlazorApp.Models;
 
 public class TodoItem
 {

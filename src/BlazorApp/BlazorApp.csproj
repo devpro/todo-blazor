@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Devpro.TodoList.BlazorApp</AssemblyName>
+    <RootNamespace>Devpro.TodoList.BlazorApp</RootNamespace>
+    <ProjectGuid>{3F931B78-71E1-4C4A-AA14-F0C173A4048F}</ProjectGuid>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
