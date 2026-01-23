@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BlazorApp1.Migrations
+namespace BlazorApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
@@ -20,12 +20,12 @@ namespace BlazorApp1.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BlazorApp1.Data.ApplicationUser", b =>
+            modelBuilder.Entity("BlazorApp.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -62,8 +62,7 @@ namespace BlazorApp1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -171,12 +170,10 @@ namespace BlazorApp1.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -190,23 +187,6 @@ namespace BlazorApp1.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<string>", b =>
-                {
-                    b.Property<byte[]>("CredentialId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("varbinary(1024)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CredentialId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserPasskeys", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -230,12 +210,10 @@ namespace BlazorApp1.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -256,7 +234,7 @@ namespace BlazorApp1.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BlazorApp1.Data.ApplicationUser", null)
+                    b.HasOne("BlazorApp.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -265,70 +243,10 @@ namespace BlazorApp1.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BlazorApp1.Data.ApplicationUser", null)
+                    b.HasOne("BlazorApp.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<string>", b =>
-                {
-                    b.HasOne("BlazorApp1.Data.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("Microsoft.AspNetCore.Identity.IdentityPasskeyData", "Data", b1 =>
-                        {
-                            b1.Property<byte[]>("IdentityUserPasskeyCredentialId")
-                                .HasColumnType("varbinary(1024)");
-
-                            b1.Property<byte[]>("AttestationObject")
-                                .IsRequired()
-                                .HasColumnType("varbinary(max)");
-
-                            b1.Property<byte[]>("ClientDataJson")
-                                .IsRequired()
-                                .HasColumnType("varbinary(max)");
-
-                            b1.Property<DateTimeOffset>("CreatedAt")
-                                .HasColumnType("datetimeoffset");
-
-                            b1.Property<bool>("IsBackedUp")
-                                .HasColumnType("bit");
-
-                            b1.Property<bool>("IsBackupEligible")
-                                .HasColumnType("bit");
-
-                            b1.Property<bool>("IsUserVerified")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<byte[]>("PublicKey")
-                                .IsRequired()
-                                .HasColumnType("varbinary(max)");
-
-                            b1.Property<long>("SignCount")
-                                .HasColumnType("bigint");
-
-                            b1.PrimitiveCollection<string>("Transports")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("IdentityUserPasskeyCredentialId");
-
-                            b1.ToTable("AspNetUserPasskeys");
-
-                            b1.ToJson("Data");
-
-                            b1.WithOwner()
-                                .HasForeignKey("IdentityUserPasskeyCredentialId");
-                        });
-
-                    b.Navigation("Data")
                         .IsRequired();
                 });
 
@@ -340,7 +258,7 @@ namespace BlazorApp1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazorApp1.Data.ApplicationUser", null)
+                    b.HasOne("BlazorApp.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -349,7 +267,7 @@ namespace BlazorApp1.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BlazorApp1.Data.ApplicationUser", null)
+                    b.HasOne("BlazorApp.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

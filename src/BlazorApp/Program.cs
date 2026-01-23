@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,9 +38,8 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
-//builder.Services.AddTransient<IUserStore<ApplicationUser>, UserStore>();
-//builder.Services.AddTransient<IRoleStore<IdentityRole<ObjectId>>, RoleStore<IdentityRole<ObjectId>>>();
+builder.Services.AddTransient<IUserStore<ApplicationUser>, BlazorApp.Data.UserStore>();
+builder.Services.AddTransient<IRoleStore<IdentityRole<ObjectId>>, BlazorApp.Data.RoleStore<IdentityRole<ObjectId>>>();
 
 builder.Services.AddScoped<TodoRepository>();
 
