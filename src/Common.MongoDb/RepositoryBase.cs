@@ -7,7 +7,7 @@ public abstract class RepositoryBase
 {
     private readonly IMongoDatabase _mongoDatabase;
 
-    protected RepositoryBase(IMongoClientFactory mongoClientFactory, ILogger<RepositoryBase> logger, MongoDbConfiguration configuration)
+    protected RepositoryBase(IMongoClientFactory mongoClientFactory, ILogger<RepositoryBase> logger, DatabaseSettings configuration)
     {
         logger.LogDebug("Opening connection to MongoDB");
         MongoClient = mongoClientFactory.CreateClient(configuration.ConnectionString);

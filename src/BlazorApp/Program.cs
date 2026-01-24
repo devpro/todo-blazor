@@ -1,4 +1,5 @@
-﻿using Devpro.TodoList.BlazorApp.Components;
+﻿using Devpro.Common.MongoDb;
+using Devpro.TodoList.BlazorApp.Components;
 using Devpro.TodoList.BlazorApp.Components.Account;
 using Devpro.TodoList.BlazorApp.Identity;
 using Devpro.TodoList.BlazorApp.Repositories;
@@ -8,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
+builder.Services.Configure<DatabaseSettings>(databaseSettings);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -24,7 +28,10 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMongoDB("mongodb://localhost:27017/", "todolist").EnableSensitiveDataLogging());
+    options.UseMongoDB(
+        databaseSettings.Get<DatabaseSettings>()?.ConnectionString ?? throw new Exception("Connection string not defined"),
+        databaseSettings.Get<DatabaseSettings>()?.DatabaseName ?? throw new Exception("Database name string not defined"))
+    .EnableSensitiveDataLogging());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
@@ -40,7 +47,8 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddTransient<IUserStore<ApplicationUser>, UserStore>();
 builder.Services.AddTransient<IRoleStore<IdentityRole<ObjectId>>, RoleStore<IdentityRole<ObjectId>>>();
 
-builder.Services.AddScoped<TodoRepository>();
+builder.Services.AddSingleton<IMongoClientFactory, DefaultMongoClientFactory>();
+builder.Services.AddScoped<TodoItemRepository>();
 
 var app = builder.Build();
 

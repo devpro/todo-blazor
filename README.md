@@ -5,6 +5,7 @@ Todo list web application written in Blazor / C# / .NET.
 ## Backlog
 
 - [x] Auth with users in MongoDB
+- [ ] Task pages
 - [ ] CI/CD
 - [ ] Dockerfile
 - [ ] Docker compose
@@ -30,7 +31,7 @@ NuGet packages:
 
 Thanks to Miiro Ashirafu for his example on Blazor user identity with MongoDB: [ashirafumiiro/MongoDBEFCoreWeatherApp](https://github.com/ashirafumiiro/MongoDBEFCoreWeatherApp).
 
-Blazor samples:
+Blazor samples ([Blazor movie database app](https://learn.microsoft.com/en-us/aspnet/core/blazor/tutorials/movie-database-app/)):
 
 ```bash
 git clone https://github.com/dotnet/blazor-samples.git

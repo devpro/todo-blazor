@@ -16,4 +16,8 @@
     <PackageReference Include="MongoDB.EntityFrameworkCore" Version="9.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common.MongoDb\Common.MongoDb.csproj" />
+  </ItemGroup>
+
 </Project>

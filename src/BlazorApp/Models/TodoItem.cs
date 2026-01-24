@@ -7,9 +7,12 @@ public class TodoItem
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
-    public string UserId { get; set; } // Link to ApplicationUser.Id.ToString()
-    public string Description { get; set; }
-    public DateTime? DueDate { get; set; }
-    public bool IsCompleted { get; set; }
+    public string Id { get; set; } = string.Empty;
+
+    public string UserId { get; set; } = string.Empty; // Link to ApplicationUser.Id.ToString()
+
+    public string Title { get; set; } = string.Empty;
+
+    [BsonElement("is_done")]
+    public bool IsDone { get; set; }
 }
