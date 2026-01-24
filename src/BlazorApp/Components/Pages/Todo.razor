@@ -1,16 +1,20 @@
 ﻿@page "/todo"
+
 @using Devpro.TodoList.BlazorApp.Components.Account
 @using Devpro.TodoList.BlazorApp.Identity
 @using Devpro.TodoList.BlazorApp.Models
 @using Devpro.TodoList.BlazorApp.Repositories
-@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
 
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavigationManager
 @inject TodoItemRepository TodoItemRepository
 
 @rendermode InteractiveServer
+
+@attribute [Authorize]
 
 <PageTitle>Todo</PageTitle>
 

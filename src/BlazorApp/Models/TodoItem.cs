@@ -9,7 +9,7 @@ public class TodoItem
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
 
-    public string UserId { get; set; } = string.Empty; // Link to ApplicationUser.Id.ToString()
+    public string UserId { get; set; } = string.Empty;
 
     public string Title { get; set; } = string.Empty;
 
