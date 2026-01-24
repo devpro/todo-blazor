@@ -1,15 +1,18 @@
-# Todo Blazor (Web Application)
+﻿# Todo Blazor (Web Application)
 
-Todo list web application written in Blazor / C# / .NET.
+A simple todo list that runs as a web application (written with Blazor / C# / .NET).
+
+For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions are more than welcome 🙂
 
 ## Backlog
 
 - [x] Auth with users in MongoDB
-- [ ] Task pages
-- [ ] CI/CD
-- [ ] Dockerfile
-- [ ] Docker compose
+- [x] Todo list page
+- [x] Dockerfile
+- [x] Docker compose
+- [ ] Health check
 - [ ] Helm chart
+- [ ] CI/CD
 - [ ] Unit tests (.NET)
 - [ ] Integration/e2e tests (Playwright)
 - [ ] Sonar
