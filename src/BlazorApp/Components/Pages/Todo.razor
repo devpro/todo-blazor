@@ -8,7 +8,6 @@
 
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavigationManager
-@inject IdentityRedirectManager RedirectManager
 @inject TodoItemRepository TodoItemRepository
 
 @rendermode InteractiveServer
@@ -58,14 +57,14 @@
                                     {
                                         <div class="flex-grow-1 @(todo.IsDone ? "text-muted text-decoration-line-through" : "")"
                                              style="cursor: text; min-height: 2rem; line-height: 1.6;"
-                                             @onclick="@(() => StartEdit(todo))">
+                                             @onclick="@(() => StartEditAsync(todo))">
                                             @todo.Title
                                         </div>
                                     }
 
                                     <button class="btn btn-sm btn-danger ms-2"
                                             title="Delete this task"
-                                            @onclick="@(() => ShowDeleteConfirm(todo))">
+                                            @onclick="@(() => ShowDeleteConfirmAsync(todo))">
                                         Delete
                                     </button>
                                 </li>
@@ -116,14 +115,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" @onclick="CancelDelete"></button>
+                    <button type="button" class="btn-close" @onclick="CancelDeleteAsync"></button>
                 </div>
                 <div class="modal-body">
                     Are you sure you want to delete "<strong>@todoToDelete.Title</strong>"?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CancelDelete">Cancel</button>
-                    <button type="button" class="btn btn-danger" @onclick="ConfirmDelete">Delete</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CancelDeleteAsync">Cancel</button>
+                    <button type="button" class="btn btn-danger" @onclick="ConfirmDeleteAsync">Delete</button>
                 </div>
             </div>
         </div>
@@ -144,17 +143,60 @@
 
     private TodoItem? todoToDelete;
 
-    private void ShowDeleteConfirm(TodoItem todo)
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await GetCurrentUserIdAsync();
+        if (string.IsNullOrEmpty(userId))
+        {
+            NavigationManager.NavigateTo("/identity/account/login?returnUrl=" + Uri.EscapeDataString(NavigationManager.Uri), forceLoad: true);
+            return;
+        }
+
+        await LoadTodoAsync(userId);
+    }
+
+    private async Task AddTodoAsync()
+    {
+        var userId = await GetCurrentUserIdAsync();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            var todoItem = new TodoItem { Title = newTodo, UserId = userId };
+            await TodoItemRepository.CreateAsync(todoItem);
+            await LoadTodoAsync(userId);
+            newTodo = string.Empty;
+        }
+    }
+
+    private async Task CheckTodoAsync(TodoItem todoItem, bool isDone)
+    {
+        var userId = await GetCurrentUserIdAsync();
+        if (string.IsNullOrEmpty(userId) || todoItem.UserId != userId)
+        {
+            return;
+        }
+
+        todoItem.IsDone = isDone;
+        await TodoItemRepository.UpdateAsync(todoItem);
+    }
+
+
+
+    private void ShowDeleteConfirmAsync(TodoItem todo)
     {
         todoToDelete = todo;
     }
 
-    private void CancelDelete()
+    private void CancelDeleteAsync()
     {
         todoToDelete = null;
     }
 
-    private async Task ConfirmDelete()
+    private async Task ConfirmDeleteAsync()
     {
         if (todoToDelete == null) return;
 
@@ -177,7 +219,7 @@
         }
     }
 
-    private void StartEdit(TodoItem todo)
+    private void StartEditAsync(TodoItem todo)
     {
         editingTodo = todo;
         editingTitle = todo.Title;
@@ -217,48 +259,7 @@
         editingTitle = null;
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var userId = await GetCurrentUserId();
-        if (string.IsNullOrEmpty(userId))
-        {
-            NavigationManager.NavigateTo("/identity/account/login?returnUrl=" + Uri.EscapeDataString(NavigationManager.Uri), forceLoad: true);
-            return;
-        }
-
-        await LoadTodo(userId);
-    }
-
-    private async Task AddTodoAsync()
-    {
-        var userId = await GetCurrentUserId();
-        if (string.IsNullOrEmpty(userId))
-        {
-            return;
-        }
-
-        if (!string.IsNullOrWhiteSpace(newTodo))
-        {
-            var todoItem = new TodoItem { Title = newTodo, UserId = userId };
-            await TodoItemRepository.CreateAsync(todoItem);
-            await LoadTodo(userId);
-            newTodo = string.Empty;
-        }
-    }
-
-    private async Task CheckTodoAsync(TodoItem todoItem, bool isDone)
-    {
-        var userId = await GetCurrentUserId();
-        if (string.IsNullOrEmpty(userId) || todoItem.UserId != userId)
-        {
-            return;
-        }
-
-        todoItem.IsDone = isDone;
-        await TodoItemRepository.UpdateAsync(todoItem);
-    }
-
-    private async Task<string?> GetCurrentUserId()
+    private async Task<string?> GetCurrentUserIdAsync()
     {
         var authState = await AuthenticationState;
         if (!authState.User.Identity?.IsAuthenticated ?? true)
@@ -276,7 +277,7 @@
         return user.Id.ToString();
     }
 
-    private async Task LoadTodo(string userId)
+    private async Task LoadTodoAsync(string userId)
     {
         todos = await TodoItemRepository.FindAsync(userId);
     }
