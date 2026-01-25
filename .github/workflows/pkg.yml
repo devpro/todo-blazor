@@ -22,7 +22,7 @@ jobs:
         with:
           files_yaml: |
             app:
-              - **/**
+              - */**
             # app:
             #   - src/**
             #   - test/**

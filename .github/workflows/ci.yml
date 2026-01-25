@@ -33,7 +33,7 @@ jobs:
         with:
           files_yaml: |
             app:
-              - **/**
+              - */**
             # doc:
             #   - docs/**
             # app:
