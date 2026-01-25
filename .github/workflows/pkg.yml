@@ -22,8 +22,10 @@ jobs:
         with:
           files_yaml: |
             app:
-              - src/**
-              - test/**
+              - **/**
+            # app:
+            #   - src/**
+            #   - test/**
   publish:
     runs-on: ubuntu-latest
     needs: check

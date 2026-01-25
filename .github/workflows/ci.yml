@@ -32,13 +32,15 @@ jobs:
         uses: tj-actions/changed-files@v47
         with:
           files_yaml: |
-            doc:
-              - docs/**
             app:
-              - src/**
-              - test/**
+              - **/**
+            # doc:
+            #   - docs/**
+            # app:
+            #   - src/**
+            #   - test/**
       - name: Lints Markdown files
-        uses: DavidAnson/markdownlint-cli2-action@v20
+        uses: DavidAnson/markdownlint-cli2-action@v22
         with:
           globs: "**/*.md"
   build:
