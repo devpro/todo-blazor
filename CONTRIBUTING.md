@@ -31,7 +31,7 @@
       ```bash
       docker build . -t devprofr/todoblazor:local -f src/BlazorApp/Dockerfile
       ```
-      
+
       - Run the container
 
       ```bash
