@@ -1,0 +1,9 @@
+services:
+  webapi:
+    image: devprofr/todoblazor:local
+    build:
+      context: .
+      dockerfile: ./src/BlazorApp/Dockerfile
+
+volumes:
+  db-data:
