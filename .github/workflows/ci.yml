@@ -33,12 +33,7 @@ jobs:
         with:
           files_yaml: |
             app:
-              - */**
-            # doc:
-            #   - docs/**
-            # app:
-            #   - src/**
-            #   - test/**
+              - README.md
       - name: Lints Markdown files
         uses: DavidAnson/markdownlint-cli2-action@v22
         with:

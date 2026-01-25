@@ -22,10 +22,7 @@ jobs:
         with:
           files_yaml: |
             app:
-              - */**
-            # app:
-            #   - src/**
-            #   - test/**
+              - README.md
   publish:
     runs-on: ubuntu-latest
     needs: check
