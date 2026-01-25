@@ -10,7 +10,7 @@ For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions 
 - [x] Todo list page
 - [x] Dockerfile
 - [x] Docker compose
-- [ ] Health check
+- [ ] Health check (with db check)
 - [ ] Helm chart
 - [ ] CI/CD
 - [ ] Unit tests (.NET)

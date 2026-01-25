@@ -50,6 +50,8 @@ builder.Services.AddTransient<IRoleStore<IdentityRole<ObjectId>>, RoleStore<Iden
 builder.Services.AddSingleton<IMongoClientFactory, DefaultMongoClientFactory>();
 builder.Services.AddScoped<TodoItemRepository>();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -68,5 +70,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.MapAdditionalIdentityEndpoints();
+
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.Run();
