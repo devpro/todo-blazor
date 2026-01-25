@@ -10,13 +10,13 @@ For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions 
 - [x] Todo list page
 - [x] Dockerfile
 - [x] Docker compose
-- [ ] Health check (with db check)
-- [ ] Helm chart
+- [x] Helm chart
 - [ ] CI/CD
+- [ ] Secret check (GitGuardian)
 - [ ] Unit tests (.NET)
 - [ ] Integration/e2e tests (Playwright)
+- [ ] Health check (with db check)
 - [ ] Sonar
-- [ ] GitGuardian
 - [ ] Code indentation review (in particular js/css files)
 
 ## Limitations
