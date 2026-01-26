@@ -1,0 +1,25 @@
+﻿@page "/debug"
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@inject NavigationManager NavigationManager
+
+@if (HttpContextAccessor?.HttpContext != null)
+{
+    var scheme = HttpContextAccessor.HttpContext.Request.Scheme;
+    var forwardedProto = HttpContextAccessor.HttpContext.Request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? "missing";
+    var baseUri = NavigationManager.BaseUri;
+
+    <div style="background: #ffebee; color: #c62828; padding: 12px; margin: 15px 0; border: 2px dashed #c62828; font-family: monospace; font-size: 14px; border-radius: 4px;">
+        <strong>DEBUG: Server-side request info (remove in production!)</strong><br />
+        • Request.Scheme ................ : @scheme<br />
+        • X-Forwarded-Proto ............ : @forwardedProto<br />
+        • NavigationManager.BaseUri .... : @baseUri<br />
+        <small>(If scheme is http but forwarded-proto is https → forwarded headers not consumed)</small>
+    </div>
+}
+else
+{
+    <div style="background: #fff3e0; padding: 10px; margin: 10px 0; border: 1px solid orange; font-family: monospace;">
+        HttpContext not available in this render context (prerender or static mode?)
+    </div>
+}

@@ -4,17 +4,28 @@ using Devpro.TodoList.BlazorApp.Components.Account;
 using Devpro.TodoList.BlazorApp.Identity;
 using Devpro.TodoList.BlazorApp.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+
 var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
 builder.Services.Configure<DatabaseSettings>(databaseSettings);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
@@ -54,10 +65,16 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
+    //app.UseHsts();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
@@ -67,6 +84,20 @@ if (builder.Configuration.GetValue<bool>("Features:IsHttpsRedirectionEnabled"))
 }
 
 app.UseAntiforgery();
+
+app.Use(async (context, next) =>
+{
+    if (context.Response.StatusCode >= 300 && context.Response.StatusCode < 400)
+    {
+        var location = context.Response.Headers.Location.ToString();
+        if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+        {
+            location = "https://" + location[7..];
+            context.Response.Headers.Location = location;
+        }
+    }
+    await next();
+});
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
