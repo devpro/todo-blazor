@@ -4,7 +4,6 @@ using Devpro.TodoList.BlazorApp.Components.Account;
 using Devpro.TodoList.BlazorApp.Identity;
 using Devpro.TodoList.BlazorApp.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
@@ -74,7 +73,6 @@ if (builder.Configuration.GetValue<bool>("Features:IsHttpsRedirectionEnabled"))
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
