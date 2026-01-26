@@ -55,8 +55,6 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-app.UseForwardedHeaders();
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
@@ -76,8 +74,6 @@ if (builder.Configuration.GetValue<bool>("Features:IsHttpsRedirectionEnabled"))
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-
-app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
