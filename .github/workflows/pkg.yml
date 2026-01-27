@@ -35,16 +35,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: devpro/github-workflow-parts
-          ref: main
+          ref: feature/sonarlogin
           path: workflow-parts
       - name: Build and push a new container image
         uses: ./workflow-parts/docker/build-push
         with:
           container_registry: docker.io
-          container_username: ${{ secrets.DOCKERHUB_USERNAME }}
-          container_password: ${{ secrets.DOCKERHUB_TOKEN }}
+          container_registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          container_registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
           docker_file: 'src/BlazorApp/Dockerfile'
           image_tag: 1.0.${{ github.run_id }}
           image_path: 'docker.io/devprofr'
           image_name: todoblazor
           create_latest: ${{ github.ref_name == 'main' }}
+          build_arguments: " --build-arg ADDITIONAL_FILE_NAME=${{ secrets.CONTAINER_ADDITIONAL_FILENAME }} --build-arg ADDITIONAL_FILE_CONTENT=\"${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}\""

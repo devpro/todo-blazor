@@ -55,6 +55,16 @@ NuGet packages:
       docker build . -t devprofr/todoblazor:local -f src/BlazorApp/Dockerfile
       ```
 
+      <!--
+      other commands that may be good to know in some edge cases:
+      docker build . -t devprofr/todoblazor:local -f src/BlazorApp/Dockerfile --build-arg ADDITIONAL_FILE_NAME=titi.txt --build-arg ADDITIONAL_FILE_CONTENT="toto"
+      docker run -it --rm --name todoblazorlocal devprofr/todoblazor:local
+      docker exec -it todoblazorlocal bash
+      docker login
+      docker build . -t devprofr/todoblazor:latest -f src/BlazorApp/Dockerfile
+      docker push devprofr/todoblazor:latest
+      -->
+
       - Run the container
 
       ```bash
