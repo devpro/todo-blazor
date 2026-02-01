@@ -67,6 +67,8 @@ jobs:
           sonar_project_name: Todo Blazor
           sonar_project_key: ${{ vars.SONAR_PROJECT_KEY }}
           sonar_token: ${{ secrets.SONAR_TOKEN }}
+          fossa_enabled: 'true'
+          fossa_api_key: ${{ secrets.FOSSA_API_KEY }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   image-scan:
