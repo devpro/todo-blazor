@@ -10,3 +10,22 @@
 A simple todo list that runs as a web application (written with Blazor / C# / .NET).
 
 For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions are more than welcome 🙂
+
+## Artifacts
+
+### Container images
+
+All images pushed to DockerHub are signed using Cosign (keyless mode via GitHub OIDC).
+
+```bash
+# predicts signature location
+docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
+  triangulate docker.io/devprofr/todoblazor:1.0.21564931504
+
+# verifies signature (recommended)
+docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
+  verify \
+    --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
+    --certificate-identity-regexp="https://github.com/devpro/todo-blazor/.github/workflows/pkg.yml@.*" \
+    docker.io/devprofr/todoblazor:1.0.21564931504
+```
