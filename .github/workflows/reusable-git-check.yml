@@ -1,0 +1,52 @@
+﻿name: Reusable - Git check
+
+on:
+  workflow_call:
+    inputs:
+      debug:
+        description: "Enable debug mode (extra logging, verbose output)"
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      app_changed:
+        description: "Whether application files changed (in src or test folder)"
+        value: ${{ jobs.git-check.outputs.app_changed }}
+
+jobs:
+  git-check:
+    name: Git
+    runs-on: ubuntu-latest
+    outputs:
+      app_changed: ${{ steps.git-diff.outputs.app_changed }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+      - name: Debug git context
+        if: ${{ inputs.debug }}
+        run: |
+          echo "Event before SHA: ${{ github.event.before }}"
+          echo "Current SHA (github.sha): ${{ github.sha }}"
+          echo "Ref/branch: ${{ github.ref_name }}"
+          git log --oneline -n 2 || echo "git log failed"
+          echo ""
+          echo "Quick diff summary:"
+          git diff --name-status ${{ github.event.before }} ${{ github.sha }} -- src/** 2>/dev/null || echo "No changes in src or diff failed"
+          git diff --name-status ${{ github.event.before }} ${{ github.sha }} -- test/** 2>/dev/null || echo "No changes in test or diff failed"
+      - name: Check git diff
+        id: git-diff
+        run: |
+          BEFORE="${{ github.event.before }}"
+          BEFORE="${BEFORE:-$(git rev-parse HEAD~1 2>/dev/null)}"
+          echo "BEFORE=$BEFORE"
+
+          if [[ -z "$BEFORE" ]]; then
+            echo "app_changed=true" >> $GITHUB_OUTPUT
+          elif git diff --quiet "$BEFORE" ${{ github.sha }} -- src test ; then
+            echo "app_changed=false" >> $GITHUB_OUTPUT
+            echo "app_changed=false"
+          else
+            echo "app_changed=true" >> $GITHUB_OUTPUT
+          fi
