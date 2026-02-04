@@ -15,7 +15,7 @@ on:
 
 jobs:
   git-check:
-    name: Git
+    name: Check
     runs-on: ubuntu-latest
     outputs:
       app_changed: ${{ steps.git-diff.outputs.app_changed }}

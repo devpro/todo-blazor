@@ -23,7 +23,7 @@ permissions:
 
 jobs:
   git-check:
-    name: Check
+    name: Git
     uses: ./.github/workflows/reusable-git-check.yml
 
   content-validate:
@@ -31,7 +31,7 @@ jobs:
     uses: devpro/github-workflow-parts/.github/workflows/reusable-content-validate.yml@feature/organize-actions
 
   build:
-    name: Build
+    name: Application
     needs: git-check
     if: github.event_name == 'workflow_dispatch' || needs.git-check.outputs.app_changed == 'true'
     uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-validate.yml@feature/organize-actions
