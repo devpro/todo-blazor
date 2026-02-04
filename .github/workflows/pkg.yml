@@ -6,51 +6,32 @@ name: PKG
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch: {}
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checks-out the repository
-        uses: actions/checkout@v5
-      - name: Get changes files
-        id: changed-files
-        uses: tj-actions/changed-files@v47
-        with:
-          files_yaml: |
-            app:
-              - src/**
-              - test/**
-  publish:
-    runs-on: ubuntu-latest
-    needs: check
-    # if: needs.check.outputs.app_any_changed == 'true'
+  git-check:
+    name: Git
+    uses: ./.github/workflows/reusable-git-check.yml
+
+  image-publication:
+    name: Image
+    needs: git-check
+    if: github.event_name == 'workflow_dispatch' || needs.git-check.outputs.app_changed == 'true'
     permissions:
       id-token: write
       contents: read
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-      - name: Checkout workflow parts
-        uses: actions/checkout@v4
-        with:
-          repository: devpro/github-workflow-parts
-          ref: main
-          path: workflow-parts
-      - name: Build and push a new container image
-        uses: ./workflow-parts/docker/build-push
-        with:
-          container_registry: docker.io
-          container_registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
-          container_registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
-          docker_file: 'src/BlazorApp/Dockerfile'
-          image_tag: 1.0.${{ github.run_id }}
-          image_path: 'docker.io/devprofr'
-          image_name: todoblazor
-          create_latest: ${{ github.ref_name == 'main' }}
-          build_arguments: >-
-            --build-arg ADDITIONAL_FILE_NAME=${{ secrets.CONTAINER_ADDITIONAL_FILENAME }}
-            --build-arg ADDITIONAL_FILE_CONTENT="${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}"
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-publication.yml@feature/organize-actions
+    with:
+      create-latest: ${{ github.ref_name == 'main' }}
+      extra-build-arguments: >-
+        --build-arg ADDITIONAL_FILE_NAME=${{ secrets.CONTAINER_ADDITIONAL_FILENAME }}
+        --build-arg ADDITIONAL_FILE_CONTENT="${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}"
+      image-definition: "src/BlazorApp/Dockerfile"
+      image-name: todoblazor
+      image-path: "docker.io/devprofr"
+      image-tag: 1.0.${{ github.run_id }}
+      workflow-parts-version: feature/organize-actions
+    secrets:
+      container-registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+      container-registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
