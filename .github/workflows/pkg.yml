@@ -51,4 +51,6 @@ jobs:
           image_path: 'docker.io/devprofr'
           image_name: todoblazor
           create_latest: ${{ github.ref_name == 'main' }}
-          build_arguments: " --build-arg ADDITIONAL_FILE_NAME=${{ secrets.CONTAINER_ADDITIONAL_FILENAME }} --build-arg ADDITIONAL_FILE_CONTENT=\"${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}\""
+          build_arguments: >-
+            --build-arg ADDITIONAL_FILE_NAME=${{ secrets.CONTAINER_ADDITIONAL_FILENAME }}
+            --build-arg ADDITIONAL_FILE_CONTENT="${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}"

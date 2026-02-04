@@ -33,8 +33,10 @@ jobs:
           git log --oneline -n 2 || echo "git log failed"
           echo ""
           echo "Quick diff summary:"
-          git diff --name-status ${{ github.event.before }} ${{ github.sha }} -- src/** 2>/dev/null || echo "No changes in src or diff failed"
-          git diff --name-status ${{ github.event.before }} ${{ github.sha }} -- test/** 2>/dev/null || echo "No changes in test or diff failed"
+          git diff --name-status ${{ github.event.before }} ${{ github.sha }} -- src/** 2>/dev/null \
+            || echo "No changes in src or diff failed"
+          git diff --name-status ${{ github.event.before }} ${{ github.sha }} -- test/** 2>/dev/null \
+            || echo "No changes in test or diff failed"
       - name: Check git diff
         id: git-diff
         run: |
