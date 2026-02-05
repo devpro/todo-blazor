@@ -114,7 +114,7 @@ Blazor samples ([Blazor movie database app](https://learn.microsoft.com/en-us/as
 
 ```bash
 git clone https://github.com/dotnet/blazor-samples.git
-cd blazor-samples\10.0\BlazorWebAppMovies
+cd blazor-samples/10.0/BlazorWebAppMovies
 dotnet tool restore
 dotnet ef database update
 dotnet run
