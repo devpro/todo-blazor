@@ -26,13 +26,13 @@ jobs:
 
   content-validate:
     name: Markup
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@feature/organize-actions
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@66ea6a268db75a8461decb7988894823d4fcc7de
 
   code-quality:
     name: Code
     needs: git-check
     if: github.event_name == 'workflow_dispatch' || needs.git-check.outputs.app_changed == 'true'
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@feature/organize-actions
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@66ea6a268db75a8461decb7988894823d4fcc7de
     with:
       extra-vars: |
         Application__IsHttpsRedirectionEnabled="false"
@@ -42,7 +42,7 @@ jobs:
       sonar-organization: ${{ vars.SONAR_ORG }}
       sonar-project-key: ${{ vars.SONAR_PROJECT_KEY }}
       sonar-project-name: Todo Blazor
-      workflow-parts-version: feature/organize-actions
+      workflow-parts-version: 66ea6a268db75a8461decb7988894823d4fcc7de
     secrets:
       fossa-api-key: ${{ secrets.FOSSA_API_KEY }}
       sonar-token: ${{ secrets.SONAR_TOKEN }}
@@ -51,7 +51,7 @@ jobs:
     name: Image
     needs: git-check
     if: github.event_name == 'workflow_dispatch' || needs.git-check.outputs.app_changed == 'true'
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@feature/organize-actions
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@66ea6a268db75a8461decb7988894823d4fcc7de
     with:
       image-definition: "src/BlazorApp/Dockerfile"
       image-tag: 1.0.${{ github.run_id }}
