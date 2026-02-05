@@ -6,7 +6,7 @@ name: PKG
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch: {}
 
 jobs:
@@ -37,4 +37,4 @@ jobs:
       container-registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
       extra-vars: |
         ADDITIONAL_FILE_NAME=${{ secrets.CONTAINER_ADDITIONAL_FILENAME }}
-        ADDITIONAL_FILE_CONTENT="${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}"
+        ADDITIONAL_FILE_CONTENT=${{ secrets.CONTAINER_ADDITIONAL_FILECONTENT }}
