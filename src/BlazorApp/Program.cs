@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +51,12 @@ builder.Services.AddTransient<IRoleStore<IdentityRole<ObjectId>>, RoleStore<Iden
 builder.Services.AddSingleton<IMongoClientFactory, DefaultMongoClientFactory>();
 builder.Services.AddScoped<TodoItemRepository>();
 
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>(
+        name: "mongodb-ef",
+        customTestQuery: (context, token) => context.Database.CanConnectAsync(token),
+        tags: ["db", "mongodb"]
+    );
 
 var app = builder.Build();
 
