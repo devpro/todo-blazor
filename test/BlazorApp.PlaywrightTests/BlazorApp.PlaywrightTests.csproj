@@ -19,6 +19,8 @@
     <PackageReference Include="Microsoft.Playwright" />
     <PackageReference Include="Microsoft.Playwright.Xunit.v3" />
     <PackageReference Include="Microsoft.Testing.Platform" />
+    <PackageReference Include="Reqnroll" />
+    <PackageReference Include="Reqnroll.xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

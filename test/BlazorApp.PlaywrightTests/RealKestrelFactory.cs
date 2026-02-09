@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;  // For GetRequiredService
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests;
@@ -14,36 +14,36 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        // Build the TestServer host first (for compatibility)
+        // builds the TestServer host first (for compatibility)
         var testHost = builder.Build();
 
-        // Switch to real Kestrel for network binding
+        // switchs to real Kestrel for network binding (listen to a random free HTTP port)
         builder.ConfigureWebHost(webHostBuilder =>
         {
             webHostBuilder.UseKestrel(options =>
             {
-                options.Listen(IPAddress.Loopback, 0);  // Random free HTTP port
+                options.Listen(IPAddress.Loopback, 0);
             });
 
-            // Disable HTTPS to avoid redirection failures (common in Blazor)
+            // disables HTTPS to avoid redirection failures
             webHostBuilder.UseSetting("https_port", "0");
         });
 
-        // Build and start the real Kestrel host
+        // builds and starts the real Kestrel host (force binding now)
         _host = builder.Build();
-        _host.Start();  // Force binding now
+        _host.Start();
 
-        // Capture the bound address
+        // captures the bound address
         var server = _host.Services.GetRequiredService<IServer>();
         var addresses = server.Features.Get<IServerAddressesFeature>()?.Addresses;
 
         ClientOptions.BaseAddress = addresses?.Select(x => new Uri(x)).Last()
             ?? throw new InvalidOperationException("No bound address found after Kestrel startup. Check for port conflicts or HTTPS-only config.");
 
-        // Start the TestServer host for factory internals
+        // starts the TestServer host for factory internals
         testHost.Start();
 
-        // Return the TestServer host (factory expects it)
+        // returns the TestServer host (factory expects it)
         return testHost;
     }
 
@@ -60,7 +60,7 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
     {
         if (_host == null)
         {
-            // Force factory bootstrap
+            // forces factory bootstrap
             using var _ = CreateDefaultClient();
         }
     }

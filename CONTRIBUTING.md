@@ -116,6 +116,12 @@ Install required browsers:
 pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net8.0/playwright.ps1 install
 ```
 
+Generate tests with:
+
+```dos
+pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 codegen https://localhost:7099/
+```
+
 <!--
 using var playwright = await Playwright.CreateAsync();
 await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = false });
