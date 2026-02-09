@@ -9,15 +9,14 @@ EXPOSE 8081
 FROM registry.suse.com/bci/dotnet-sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/", "./"]
-RUN dotnet restore "BlazorApp/BlazorApp.csproj"
 COPY . .
-WORKDIR "/src/BlazorApp"
-RUN dotnet build "BlazorApp.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
+RUN dotnet restore "src/BlazorApp/BlazorApp.csproj"
+RUN dotnet build "src/BlazorApp/BlazorApp.csproj" --no-restore -c "$BUILD_CONFIGURATION"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "BlazorApp.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
+WORKDIR /src
+RUN dotnet publish "src/BlazorApp/BlazorApp.csproj" --no-build -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 RUN --mount=type=secret,id=additional_file_name,env=ADDITIONAL_FILE_NAME \
     --mount=type=secret,id=additional_file_content,env=ADDITIONAL_FILE_CONTENT \
     if [ -n "$ADDITIONAL_FILE_NAME" ] && [ -n "$ADDITIONAL_FILE_CONTENT" ]; then \
