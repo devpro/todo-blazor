@@ -20,4 +20,5 @@
   <Project Path="src/BlazorApp/BlazorApp.csproj" />
   <Project Path="src/Common.MongoDb/Common.MongoDb.csproj" Id="c066cf9d-51d8-4a5f-aad6-3d62f3f9bc49" />
   <Project Path="test/BlazorApp.IntegrationTests/BlazorApp.IntegrationTests.csproj" Id="b9481220-a5c1-41e1-b51f-02f0f0d19191" />
+  <Project Path="test/BlazorApp.PlaywrightTests/BlazorApp.PlaywrightTests.csproj" Id="3c327f37-f47f-4c2d-a834-715a7f94c366" />
 </Solution>
