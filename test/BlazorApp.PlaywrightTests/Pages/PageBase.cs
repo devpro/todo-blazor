@@ -10,7 +10,7 @@ public class PageBase(IPage page)
 
     private ILocator LoginLink => Page.GetByRole(AriaRole.Link, new() { Name = "Login" });
 
-    private ILocator RegisterLink => Page.GetByRole(AriaRole.Link, new() { Name = "Register" });
+    private ILocator RegisterLink => Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true });
 
     private ILocator LogoutLink => Page.GetByRole(AriaRole.Button, new() { Name = "Logout" });
 

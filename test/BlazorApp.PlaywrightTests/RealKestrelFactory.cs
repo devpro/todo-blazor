@@ -18,7 +18,7 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
         // builds the TestServer host first (for compatibility)
         var testHost = builder.Build();
 
-        // switchs to real Kestrel for network binding (listen to a random free HTTP port)
+        // switches to real Kestrel for network binding (listen to a random free HTTP port)
         builder.ConfigureWebHost(webHostBuilder =>
         {
             webHostBuilder.UseKestrel(options =>
@@ -30,6 +30,7 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
             webHostBuilder.UseSetting("https_port", "0");
         });
 
+        // switches to a redirect manager to fix issue with successful login redirect
         builder.ConfigureServices(services =>
         {
             var originalDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IdentityRedirectManager));
@@ -41,7 +42,7 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
             services.AddScoped<IdentityRedirectManager, BypassIdentityRedirectManager>();
         });
 
-        // builds and starts the real Kestrel host (force binding now)
+        // builds and starts the real Kestrel host (force binding)
         _host = builder.Build();
         _host.Start();
 

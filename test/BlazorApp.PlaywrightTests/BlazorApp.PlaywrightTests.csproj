@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="Bogus" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="JunitXml.TestLogger" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
