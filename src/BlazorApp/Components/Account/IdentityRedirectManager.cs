@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Devpro.TodoList.BlazorApp.Components.Account
 {
-    internal sealed class IdentityRedirectManager(NavigationManager navigationManager)
+    public class IdentityRedirectManager(NavigationManager navigationManager)
     {
+        protected NavigationManager NavigationManager { get; private set; } = navigationManager;
+
         public const string StatusCookieName = "Identity.StatusMessage";
 
         private static readonly CookieBuilder StatusCookieBuilder = new()
@@ -16,23 +18,23 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
             MaxAge = TimeSpan.FromSeconds(5),
         };
 
-        public void RedirectTo(string? uri)
+        public virtual void RedirectTo(string? uri)
         {
             uri ??= "";
 
             // Prevent open redirects.
             if (!Uri.IsWellFormedUriString(uri, UriKind.Relative))
             {
-                uri = navigationManager.ToBaseRelativePath(uri);
+                uri = NavigationManager.ToBaseRelativePath(uri);
             }
 
-            navigationManager.NavigateTo(uri);
+            NavigationManager.NavigateTo(uri);
         }
 
         public void RedirectTo(string uri, Dictionary<string, object?> queryParameters)
         {
-            var uriWithoutQuery = navigationManager.ToAbsoluteUri(uri).GetLeftPart(UriPartial.Path);
-            var newUri = navigationManager.GetUriWithQueryParameters(uriWithoutQuery, queryParameters);
+            var uriWithoutQuery = NavigationManager.ToAbsoluteUri(uri).GetLeftPart(UriPartial.Path);
+            var newUri = NavigationManager.GetUriWithQueryParameters(uriWithoutQuery, queryParameters);
             RedirectTo(newUri);
         }
 
@@ -42,7 +44,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
             RedirectTo(uri);
         }
 
-        private string CurrentPath => navigationManager.ToAbsoluteUri(navigationManager.Uri).GetLeftPart(UriPartial.Path);
+        private string CurrentPath => NavigationManager.ToAbsoluteUri(NavigationManager.Uri).GetLeftPart(UriPartial.Path);
 
         public void RedirectToCurrentPage() => RedirectTo(CurrentPath);
 
