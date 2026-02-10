@@ -1,5 +1,5 @@
 ﻿name: CI
-# purpose: Continuous Integration pipeline
+# description: Continuous Integration pipeline
 
 on:
   push:
@@ -23,9 +23,8 @@ concurrency:
   group: "${{ github.ref }}-ci"
   cancel-in-progress: true
 
-permissions:
-  contents: read
-  pull-requests: write
+env:
+  VERSION_MAJOR_MINOR: 1.1
 
 jobs:
   git-check:
@@ -57,6 +56,9 @@ jobs:
     secrets:
       fossa-api-key: ${{ secrets.FOSSA_API_KEY }}
       sonar-token: ${{ secrets.SONAR_TOKEN }}
+    permissions:
+      contents: read
+      pull-requests: write
 
   image-scan:
     name: Image
@@ -65,9 +67,9 @@ jobs:
     uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@f61750746227ea28ae379e5a36ad52096fb34967
     with:
       image-definition: "src/BlazorApp/Dockerfile"
-      image-tag: 1.0.${{ github.run_id }}
-      image-path: "docker.io/devprofr"
-      image-name: todoblazor
+      image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
+      image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
+      image-tag: ${{ env.VERSION_MAJOR_MINOR }}.${{ github.run_id }}
       neuvector-enabled: true
       # temp trivy fix with ignoring vulnerability SUSE-SU-2026:0215-1
       trivy-enabled: true

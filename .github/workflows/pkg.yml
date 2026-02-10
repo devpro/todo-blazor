@@ -1,10 +1,13 @@
 name: PKG
-# purpose: Continuous Delivery (aka Packaging & Shipping)
+# description: Continuous Delivery (aka Packaging & Shipping)
 
 on:
   push:
     branches: [main]
   workflow_dispatch: {}
+
+env:
+  VERSION_MAJOR_MINOR: 1.1
 
 jobs:
   git-check:
@@ -25,9 +28,9 @@ jobs:
         --secret id=additional_file_name,env=ADDITIONAL_FILE_NAME
         --secret id=additional_file_content,env=ADDITIONAL_FILE_CONTENT
       image-definition: "src/BlazorApp/Dockerfile"
-      image-name: todoblazor
-      image-path: "docker.io/devprofr"
-      image-tag: 1.0.${{ github.run_id }}
+      image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
+      image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
+      image-tag: ${{ env.VERSION_MAJOR_MINOR }}.${{ github.run_id }}
       workflow-parts-version: f61750746227ea28ae379e5a36ad52096fb34967
     secrets:
       container-registry-password: ${{ secrets.DOCKERHUB_TOKEN }}

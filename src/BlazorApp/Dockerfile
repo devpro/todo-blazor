@@ -16,7 +16,8 @@ RUN dotnet build "src/BlazorApp/BlazorApp.csproj" --no-restore -c "$BUILD_CONFIG
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-RUN dotnet publish "src/BlazorApp/BlazorApp.csproj" --no-build -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "src/BlazorApp/BlazorApp.csproj" --no-build -c "$BUILD_CONFIGURATION" \
+    -o /app/publish /p:UseAppHost=false
 RUN --mount=type=secret,id=additional_file_name,env=ADDITIONAL_FILE_NAME \
     --mount=type=secret,id=additional_file_content,env=ADDITIONAL_FILE_CONTENT \
     if [ -n "$ADDITIONAL_FILE_NAME" ] && [ -n "$ADDITIONAL_FILE_CONTENT" ]; then \
