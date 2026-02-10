@@ -7,7 +7,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  VERSION_MAJOR_MINOR: 1.1
+  VERSION_MAJOR_MINOR: "1.1"
 
 jobs:
   git-check:
@@ -30,7 +30,7 @@ jobs:
       image-definition: "src/BlazorApp/Dockerfile"
       image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
       image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
-      image-tag: $VERSION_MAJOR_MINOR.${{ github.run_id }}
+      image-tag: "${{ env.VERSION_MAJOR_MINOR }}.${{ github.run_id }}"
       workflow-parts-version: f61750746227ea28ae379e5a36ad52096fb34967
     secrets:
       container-registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
