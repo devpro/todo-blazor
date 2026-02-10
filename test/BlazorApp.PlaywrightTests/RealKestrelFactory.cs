@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Devpro.TodoList.BlazorApp.Components.Account;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -27,6 +28,17 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
 
             // disables HTTPS to avoid redirection failures
             webHostBuilder.UseSetting("https_port", "0");
+        });
+
+        builder.ConfigureServices(services =>
+        {
+            var originalDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IdentityRedirectManager));
+            if (originalDescriptor != null)
+            {
+                services.Remove(originalDescriptor);
+            }
+
+            services.AddScoped<IdentityRedirectManager, BypassIdentityRedirectManager>();
         });
 
         // builds and starts the real Kestrel host (force binding now)
