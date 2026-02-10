@@ -23,9 +23,6 @@ concurrency:
   group: "${{ github.ref }}-ci"
   cancel-in-progress: true
 
-env:
-  VERSION_MAJOR_MINOR: "1.1"
-
 jobs:
   git-check:
     name: Git
@@ -69,7 +66,7 @@ jobs:
       image-definition: "src/BlazorApp/Dockerfile"
       image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
       image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
-      image-tag: "${{ env.VERSION_MAJOR_MINOR }}.${{ github.run_id }}"
+      image-tag: 1.1.${{ github.run_id }}
       neuvector-enabled: true
       # temp trivy fix with ignoring vulnerability SUSE-SU-2026:0215-1
       trivy-enabled: true
