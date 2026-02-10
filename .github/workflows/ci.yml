@@ -66,9 +66,8 @@ jobs:
       image-definition: "src/BlazorApp/Dockerfile"
       image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
       image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
-      image-tag: 1.1.${{ github.run_id }}
+      image-tag: "${{ needs.git-check.outputs.version_major_minor }}.${{ github.run_id }}"
       neuvector-enabled: true
-      # temp trivy fix with ignoring vulnerability SUSE-SU-2026:0215-1
       trivy-enabled: true
       max-high-cves: 0
       max-medium-cves: 0

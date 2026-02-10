@@ -12,6 +12,9 @@ on:
       app_changed:
         description: "Whether application files changed (in src or test folder)"
         value: ${{ jobs.git-check.outputs.app_changed }}
+      version_major_minor:
+        description: "Version \"Major.Minor\" read from Directory.Build.props file"
+        value: ${{ jobs.git-check.outputs.version_major_minor }}
 
 jobs:
   git-check:
@@ -19,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       app_changed: ${{ steps.git-diff.outputs.app_changed }}
+      version_major_minor: ${{ steps.extract-version.outputs.version_major_minor }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v6
@@ -50,3 +54,18 @@ jobs:
           else
             echo "app_changed=true" >> $GITHUB_OUTPUT
           fi
+      - name: Extract version from Directory.Build.props
+        id: extract-version
+        run: |
+          VERSION_PREFIX=$(grep -oP '(?<=<VersionPrefix>).*?(?=</VersionPrefix>)' Directory.Build.props | tr -d ' \t\n\r')
+
+          if [ -z "$VERSION_PREFIX" ]; then
+            echo "Error: Could not find VersionPrefix in Directory.Build.props"
+            exit 1
+          fi
+
+          MAJOR_MINOR=$(echo "$VERSION_PREFIX" | cut -d'.' -f1-2)
+
+          echo "Major.Minor: $MAJOR_MINOR"
+
+          echo "version_major_minor=$MAJOR_MINOR" >> "$GITHUB_OUTPUT"
