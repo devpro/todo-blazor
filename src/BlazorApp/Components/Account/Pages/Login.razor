@@ -106,7 +106,12 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+
+            var target = string.IsNullOrWhiteSpace(ReturnUrl)
+                ? NavigationManager.BaseUri
+                : ReturnUrl;
+
+            RedirectManager.RedirectTo(target);
         }
         else if (result.RequiresTwoFactor)
         {
