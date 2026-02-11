@@ -1,13 +1,14 @@
 ﻿using Bogus;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
 using Microsoft.Playwright;
 using Microsoft.Playwright.Xunit.v3;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests;
 
-public class WalkthroughTest(RealKestrelFactory factory) : PageTest(), IClassFixture<RealKestrelFactory>
+public class WalkthroughTest(BlazorAppFactory factory) : PageTest(), IClassFixture<BlazorAppFactory>
 {
-    private readonly RealKestrelFactory _factory = factory;
+    private readonly BlazorAppFactory _factory = factory;
     private readonly Faker _faker = new();
 
     public override async ValueTask InitializeAsync()
@@ -26,31 +27,25 @@ public class WalkthroughTest(RealKestrelFactory factory) : PageTest(), IClassFix
         try
         {
             var homePage = new HomePage(Page);
-            await homePage.NavigateAsync(_factory.ServerAddress);
-            await homePage.AssertTitleAndMainHeaderAsync("Home", "Hello, world!");
+            await homePage.NavigateToAsync(_factory.ServerAddress);
+            await homePage.VerifyPageHeaderAsync("Hello, world!");
 
             var loginPage = await homePage.OpenLoginAsync();
-            await loginPage.AssertTitleAndMainHeaderAsync("Log in", "Log in");
+            await loginPage.VerifyPageHeaderAsync("Log in");
             await loginPage.EnterCredentialsAsync(userInfo.Email, userInfo.Password);
-            await loginPage.SubmitLoginAsync();
-            await loginPage.AssertErrorVisibleAsync();
-            await loginPage.AssertErrorTextAsync("Error: Invalid login attempt.");
+            await loginPage.SubmitAndVerifyFailureAsync("Error: Invalid login attempt.");
 
             var registerPage = await loginPage.OpenRegisterAsync();
-            await registerPage.AssertTitleAndMainHeaderAsync("Register", "Register");
+            await registerPage.VerifyPageHeaderAsync("Register");
             await registerPage.EnterCredentialsAsync(userInfo.Email, userInfo.Password, userInfo.Password);
-            var registerConfirmPage = await registerPage.SubmitRegisterAndCheckSuccessAsync();
-            await registerConfirmPage.AssertTitleAndMainHeaderAsync("Register confirmation", "Register confirmation");
+            var registerConfirmPage = await registerPage.SubmitAndVerifySuccessAsync();
+            await registerConfirmPage.VerifyPageHeaderAsync("Register confirmation");
             await registerConfirmPage.ClickConfirmationLinkAsync();
 
             loginPage = await registerConfirmPage.OpenLoginAsync();
-            await loginPage.AssertTitleAndMainHeaderAsync("Log in", "Log in");
-            await loginPage.SubmitLoginAsync();
             await loginPage.EnterCredentialsAsync(userInfo.Email, userInfo.Password);
-            homePage = await loginPage.SubmitLoginAndCheckSuccessAsync();
-            await homePage.AssertTitleAndMainHeaderAsync("Home", "Hello, world!");
+            homePage = await loginPage.SubmitAndVerifySuccessAsync();
             await homePage.ClickLogoutAsync();
-            await homePage.AssertTitleAndMainHeaderAsync("Home", "Hello, world!");
         }
         catch (Exception)
         {

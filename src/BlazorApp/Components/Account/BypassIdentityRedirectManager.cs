@@ -1,8 +1,6 @@
-﻿using Devpro.TodoList.BlazorApp.Components.Account;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components;
 
-namespace Devpro.TodoList.BlazorApp.PlaywrightTests;
+namespace Devpro.TodoList.BlazorApp.Components.Account;
 
 public class BypassIdentityRedirectManager(NavigationManager navigationManager, IHttpContextAccessor httpContextAccessor)
     : IdentityRedirectManager(navigationManager)

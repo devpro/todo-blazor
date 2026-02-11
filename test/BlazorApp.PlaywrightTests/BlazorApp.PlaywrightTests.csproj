@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BlazorApp\BlazorApp.csproj" />
+    <ProjectReference Include="..\..\src\Common.Mvc.Testing\Common.Mvc.Testing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

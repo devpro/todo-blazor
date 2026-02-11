@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Devpro.TodoList.BlazorApp.Components.Account;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -7,9 +6,17 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Devpro.TodoList.BlazorApp.PlaywrightTests;
+namespace Devpro.Common.Mvc.Testing;
 
-public class RealKestrelFactory : WebApplicationFactory<Program>
+/// <summary>
+/// Workaround to use Playwright with a Blazor Server application.
+/// </summary>
+/// <typeparam name="TEntryPoint"></typeparam>
+/// <remarks>
+/// https://github.com/dotnet/aspnetcore/blob/main/src/Mvc/Mvc.Testing/src/WebApplicationFactory.cs
+/// </remarks>
+public class RealKestrelFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint>
+    where TEntryPoint : class
 {
     private IHost? _host;
 
@@ -30,17 +37,7 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
             webHostBuilder.UseSetting("https_port", "0");
         });
 
-        // switches to a redirect manager to fix issue with successful login redirect
-        builder.ConfigureServices(services =>
-        {
-            var originalDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IdentityRedirectManager));
-            if (originalDescriptor != null)
-            {
-                services.Remove(originalDescriptor);
-            }
-
-            services.AddScoped<IdentityRedirectManager, BypassIdentityRedirectManager>();
-        });
+        ConfigureServices(builder);
 
         // builds and starts the real Kestrel host (force binding)
         _host = builder.Build();
@@ -58,6 +55,10 @@ public class RealKestrelFactory : WebApplicationFactory<Program>
 
         // returns the TestServer host (factory expects it)
         return testHost;
+    }
+
+    protected virtual void ConfigureServices(IHostBuilder builder)
+    {
     }
 
     public string ServerAddress

@@ -10,7 +10,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
 
         public const string StatusCookieName = "Identity.StatusMessage";
 
-        private static readonly CookieBuilder StatusCookieBuilder = new()
+        private static readonly CookieBuilder s_statusCookieBuilder = new()
         {
             SameSite = SameSiteMode.Strict,
             HttpOnly = true,
@@ -22,7 +22,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
         {
             uri ??= "";
 
-            // Prevent open redirects.
+            // prevents open redirects
             if (!Uri.IsWellFormedUriString(uri, UriKind.Relative))
             {
                 uri = NavigationManager.ToBaseRelativePath(uri);
@@ -40,7 +40,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
 
         public void RedirectToWithStatus(string uri, string message, HttpContext context)
         {
-            context.Response.Cookies.Append(StatusCookieName, message, StatusCookieBuilder.Build(context));
+            context.Response.Cookies.Append(StatusCookieName, message, s_statusCookieBuilder.Build(context));
             RedirectTo(uri);
         }
 

@@ -11,7 +11,6 @@ public abstract class RepositoryBase
     {
         logger.LogDebug("Opening connection to MongoDB");
         MongoClient = mongoClientFactory.CreateClient(configuration.ConnectionString);
-        logger.LogDebug("Getting database {DatabaseName}", configuration.DatabaseName);
         _mongoDatabase = MongoClient.GetDatabase(configuration.DatabaseName);
     }
 

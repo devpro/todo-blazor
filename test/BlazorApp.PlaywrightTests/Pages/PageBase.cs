@@ -2,11 +2,17 @@
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 
-public class PageBase(IPage page)
+public abstract class PageBase(IPage page)
 {
+    // base
+
     protected IPage Page { get; private set; } = page;
 
-    private ILocator MainHeader => Page.Locator("h1");
+    protected abstract string WebPageTitle { get; }
+
+    // locators
+
+    private ILocator PageHeader => Page.Locator("h1");
 
     private ILocator LoginLink => Page.GetByRole(AriaRole.Link, new() { Name = "Login" });
 
@@ -14,32 +20,42 @@ public class PageBase(IPage page)
 
     private ILocator LogoutLink => Page.GetByRole(AriaRole.Button, new() { Name = "Logout" });
 
-    public async Task AssertTitleAndMainHeaderAsync(string title, string header)
+    // assertions
+
+    public async Task WaitForReadyAsync()
     {
-        await Assertions.Expect(Page).ToHaveTitleAsync(title);
-        await Assertions.Expect(MainHeader).ToHaveTextAsync(header);
+        await Assertions.Expect(Page).ToHaveTitleAsync(WebPageTitle);
+        await Assertions.Expect(PageHeader).ToBeVisibleAsync();
     }
 
-    public async Task NavigateAsync(string baseAdress)
+    public async Task VerifyPageHeaderAsync(string header)
     {
-        await Page.GotoAsync(baseAdress);
+        await Assertions.Expect(PageHeader).ToHaveTextAsync(header);
     }
+
+    // actions
 
     public async Task<LoginPage> OpenLoginAsync()
     {
         await LoginLink.ClickAsync();
-        return new LoginPage(Page);
+        var loginPage = new LoginPage(Page);
+        await loginPage.WaitForReadyAsync();
+        return loginPage;
     }
 
     public async Task<RegisterPage> OpenRegisterAsync()
     {
         await RegisterLink.ClickAsync();
-        return new RegisterPage(Page);
+        var registerPage = new RegisterPage(Page);
+        await registerPage.WaitForReadyAsync();
+        return registerPage;
     }
 
     public async Task<HomePage> ClickLogoutAsync()
     {
         await LogoutLink.ClickAsync();
-        return new HomePage(Page);
+        var homePage = new HomePage(Page);
+        await homePage.WaitForReadyAsync();
+        return homePage;
     }
 }
