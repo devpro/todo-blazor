@@ -1,5 +1,6 @@
 ﻿using Devpro.Common.Mvc.Testing;
 using Devpro.TodoList.BlazorApp.Components.Account;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing.Account;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
