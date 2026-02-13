@@ -13,10 +13,4 @@ public class TodoSteps(ScenarioContext scenarioContext)
         var todoPage = GetCurrentPage<TodoPage>();
         await todoPage.AddItem(todo);
     }
-
-    [Then("the todo list should contain {string}")]
-    public void TodoListShouldContain(string todo)
-    {
-        // TODO
-    }
 }

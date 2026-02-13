@@ -40,7 +40,6 @@ jobs:
           echo "github.sha      = ${{ github.sha }}"
           echo "github.ref_name = ${{ github.ref_name }}"
           echo "base ref        = ${{ github.base_ref }}"
-          echo "head ref        = ${{ github.head_ref }}"
           echo "pr base sha     = ${{ github.event.pull_request.base.sha }}"
           echo "pr head sha     = ${{ github.event.pull_request.head.sha }}"
           git log --oneline -n 5 --decorate --graph || true

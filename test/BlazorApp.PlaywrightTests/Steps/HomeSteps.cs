@@ -5,7 +5,7 @@ using Reqnroll;
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Steps;
 
 [Binding]
-public class HomeSteps(ScenarioContext scenarioContext)
+public partial class HomeSteps(ScenarioContext scenarioContext)
     : StepBase(scenarioContext)
 {
     [Given("I navigate to the home page")]
@@ -54,7 +54,10 @@ public class HomeSteps(ScenarioContext scenarioContext)
     {
         var currentPage = GetCurrentPage<PageBase>();
         var todoPage = await currentPage.OpenTodoAsync();
-        await todoPage.VerifyPageHeaderAsync(new Regex("Todo"));
+        await todoPage.VerifyPageHeaderAsync(TodoTitleRegex());
         SetCurrentPage(todoPage);
     }
+
+    [GeneratedRegex("Todo", RegexOptions.None)]
+    private static partial Regex TodoTitleRegex();
 }
