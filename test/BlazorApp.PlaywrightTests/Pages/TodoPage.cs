@@ -12,7 +12,7 @@ public class TodoPage(IPage page) : PageBase(page)
 
     private ILocator NewInput => Page.GetByRole(AriaRole.Textbox, new() { Name = "Something todo" });
 
-    private ILocator AddButton => Page.GetByRole(AriaRole.Button, new () { Name = "Add todo" });
+    private ILocator AddButton => Page.GetByRole(AriaRole.Button, new() { Name = "Add todo" });
 
     // actions
 

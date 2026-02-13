@@ -13,7 +13,7 @@ public class AuthenticationSteps(ScenarioContext scenarioContext)
     {
         var loginPage = GetCurrentPage<LoginPage>();
         await loginPage.EnterCredentialsAsync(GenerateEmail(), GeneratePassword());
-        
+
     }
 
     [Then("I see login error {string}")]
