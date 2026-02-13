@@ -1,4 +1,5 @@
-﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
+﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
 using Microsoft.Playwright;
 using Reqnroll;
 
@@ -20,16 +21,7 @@ public class PlaywrightHooks
             Headless = true,
             SlowMo = 0
         });
-
         s_appFixture = new BlazorAppFixture();
-    }
-
-    [AfterTestRun]
-    public static async Task AfterTestRun()
-    {
-        await s_browser?.CloseAsync()!;
-        s_playwrightInstance?.Dispose();
-        if (s_appFixture != null) await s_appFixture.DisposeAsync();
     }
 
     [BeforeScenario]
@@ -52,16 +44,16 @@ public class PlaywrightHooks
         page.SetDefaultTimeout(10000);
         page.SetDefaultNavigationTimeout(20000);
 
-        scenarioContext["Page"] = page;
-        scenarioContext["Context"] = context;
-        scenarioContext["BlazorServerAddress"] = s_appFixture!.ServerAddress;
+        scenarioContext[ScenarioContextKeys.Page] = page;
+        scenarioContext[ScenarioContextKeys.Context] = context;
+        scenarioContext[ScenarioContextKeys.BlazorServerAddress] = s_appFixture!.ServerAddress;
     }
 
     [AfterScenario]
     public static async Task AfterScenario(ScenarioContext scenarioContext)
     {
-        if (!scenarioContext.TryGetValue("Page", out var pageObj) || pageObj is not IPage page) return;
-        if (!scenarioContext.TryGetValue("Context", out var contextObj) || contextObj is not IBrowserContext context) return;
+        if (!scenarioContext.TryGetValue(ScenarioContextKeys.Page, out var pageObj) || pageObj is not IPage page) return;
+        if (!scenarioContext.TryGetValue(ScenarioContextKeys.Context, out var contextObj) || contextObj is not IBrowserContext context) return;
 
         var traceDir = Path.Combine(Directory.GetCurrentDirectory(), "traces");
         Directory.CreateDirectory(traceDir);
@@ -79,5 +71,13 @@ public class PlaywrightHooks
 
         await page.CloseAsync();
         await context.CloseAsync();
+    }
+
+    [AfterTestRun]
+    public static async Task AfterTestRun()
+    {
+        if (s_appFixture != null) await s_appFixture.DisposeAsync();
+        await s_browser?.CloseAsync()!;
+        s_playwrightInstance?.Dispose();
     }
 }
