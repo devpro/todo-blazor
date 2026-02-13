@@ -30,13 +30,13 @@ jobs:
 
   content-validate:
     name: Markup
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@f61750746227ea28ae379e5a36ad52096fb34967
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@feature/add-fossa-report
 
   code-quality:
     name: Code
     needs: git-check
     if: needs.git-check.outputs.app_changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.run-code-quality)
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@f61750746227ea28ae379e5a36ad52096fb34967
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@feature/add-fossa-report
     with:
       custom-commands: |
         dotnet build --no-restore --configuration Debug test/BlazorApp.PlaywrightTests
@@ -49,7 +49,6 @@ jobs:
       sonar-organization: ${{ vars.SONAR_ORG }}
       sonar-project-key: ${{ vars.SONAR_PROJECT_KEY }}
       sonar-project-name: Todo Blazor
-      workflow-parts-version: f61750746227ea28ae379e5a36ad52096fb34967
     secrets:
       fossa-api-key: ${{ secrets.FOSSA_API_KEY }}
       sonar-token: ${{ secrets.SONAR_TOKEN }}
@@ -61,7 +60,7 @@ jobs:
     name: Image
     needs: git-check
     if: needs.git-check.outputs.app_changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.run-image-scan)
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@f61750746227ea28ae379e5a36ad52096fb34967
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@feature/add-fossa-report
     with:
       image-definition: "src/BlazorApp/Dockerfile"
       image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
