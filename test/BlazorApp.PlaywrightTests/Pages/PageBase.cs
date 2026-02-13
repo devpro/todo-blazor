@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using System.Text.RegularExpressions;
+using Microsoft.Playwright;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 
@@ -20,6 +21,8 @@ public abstract class PageBase(IPage page)
 
     private ILocator LogoutLink => Page.GetByRole(AriaRole.Button, new() { Name = "Logout" });
 
+    private ILocator TodoLink => Page.GetByRole(AriaRole.Link, new() { Name = "Todo" });
+
     // assertions
 
     public async Task WaitForReadyAsync()
@@ -29,6 +32,11 @@ public abstract class PageBase(IPage page)
     }
 
     public async Task VerifyPageHeaderAsync(string header)
+    {
+        await Assertions.Expect(PageHeader).ToHaveTextAsync(header);
+    }
+
+    public async Task VerifyPageHeaderAsync(Regex header)
     {
         await Assertions.Expect(PageHeader).ToHaveTextAsync(header);
     }
@@ -57,5 +65,13 @@ public abstract class PageBase(IPage page)
         var homePage = new HomePage(Page);
         await homePage.WaitForReadyAsync();
         return homePage;
+    }
+
+    public async Task<TodoPage> OpenTodoAsync()
+    {
+        await TodoLink.ClickAsync();
+        var todoPage = new TodoPage(Page);
+        await todoPage.WaitForReadyAsync();
+        return todoPage;
     }
 }

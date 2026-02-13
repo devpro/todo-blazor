@@ -8,17 +8,8 @@ namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Steps;
 public class RegistrationSteps(ScenarioContext scenarioContext)
     : StepBase(scenarioContext)
 {
-    [When(@"I open the register page")]
-    public async Task WhenOpenRegisterPage()
-    {
-        var currentPage = GetCurrentPage<PageBase>();
-        var registerPage = await currentPage.OpenRegisterAsync();
-        await registerPage.VerifyPageHeaderAsync("Register");
-        SetCurrentPage(registerPage);
-    }
-
-    [When(@"I register with valid credentials")]
-    public async Task WhenRegisterWithValidCredentials()
+    [When("I register with valid credentials")]
+    public async Task RegisterWithValidCredentials()
     {
         var registerPage = GetCurrentPage<RegisterPage>();
         var email = GenerateEmail();
@@ -30,15 +21,23 @@ public class RegistrationSteps(ScenarioContext scenarioContext)
         SetCurrentPage(registerConfirmPage);
     }
 
-    [Then(@"I see register confirmation page")]
-    public async Task ThenSeeRegisterConfirmation()
+    [Given("I register with valid credentials")]
+    public async Task RegisterAndConfirmWithValidCredentials()
+    {
+        await RegisterWithValidCredentials();
+        await SeeRegisterConfirmation();
+        await ClickConfirmationLink();
+    }
+
+    [Then("I see register confirmation page")]
+    public async Task SeeRegisterConfirmation()
     {
         var registerConfirmPage = GetCurrentPage<RegisterConfirmPage>();
         await registerConfirmPage.VerifyPageHeaderAsync("Register confirmation");
     }
 
-    [When(@"I click the confirmation link")]
-    public async Task WhenClickConfirmationLink()
+    [When("I click the confirmation link")]
+    public async Task ClickConfirmationLink()
     {
         var registerConfirmPage = GetCurrentPage<RegisterConfirmPage>();
         await registerConfirmPage.ClickConfirmationLinkAsync();

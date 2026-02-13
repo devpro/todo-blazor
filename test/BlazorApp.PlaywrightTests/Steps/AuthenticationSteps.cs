@@ -8,17 +8,8 @@ namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Steps;
 public class AuthenticationSteps(ScenarioContext scenarioContext)
     : StepBase(scenarioContext)
 {
-    [When("I open the login page")]
-    public async Task WhenOpenLogin()
-    {
-        var currentPage = GetCurrentPage<PageBase>();
-        var loginPage = await currentPage.OpenLoginAsync();
-        await loginPage.VerifyPageHeaderAsync("Log in");
-        SetCurrentPage(loginPage);
-    }
-
     [When("I enter invalid credentials")]
-    public async Task WhenEnterInvalidCredentials()
+    public async Task EnterInvalidCredentials()
     {
         var loginPage = GetCurrentPage<LoginPage>();
         await loginPage.EnterCredentialsAsync(GenerateEmail(), GeneratePassword());
@@ -26,14 +17,14 @@ public class AuthenticationSteps(ScenarioContext scenarioContext)
     }
 
     [Then("I see login error {string}")]
-    public async Task ThenISeeLoginError(string message)
+    public async Task SeeLoginError(string message)
     {
         var loginPage = GetCurrentPage<LoginPage>();
         await loginPage.SubmitAndVerifyFailureAsync(message);
     }
 
     [When("I login with the registered credentials")]
-    public async Task WhenLoginRegistered()
+    public async Task LoginRegistered()
     {
         var currentPage = GetCurrentPage<PageBase>();
         var loginPage = await currentPage.OpenLoginAsync();
@@ -43,16 +34,22 @@ public class AuthenticationSteps(ScenarioContext scenarioContext)
     }
 
     [Then("I am on the home page after successful login")]
-    public async Task ThenIAmOnTheHomePageAfterSuccessfulLogin()
+    public async Task OnTheHomePageAfterSuccessfulLogin()
     {
         var loginPage = GetCurrentPage<LoginPage>();
         var homePage = await loginPage.SubmitAndVerifySuccessAsync();
         SetCurrentPage(homePage);
     }
 
+    [Given("I am logged in")]
+    public async Task AmLoggedIn()
+    {
+        await LoginRegistered();
+        await OnTheHomePageAfterSuccessfulLogin();
+    }
 
     [When("I click logout")]
-    public async Task WhenClickLogout()
+    public async Task ClickLogout()
     {
         var currentPage = GetCurrentPage<PageBase>();
         var homePage = await currentPage.ClickLogoutAsync();
@@ -60,7 +57,7 @@ public class AuthenticationSteps(ScenarioContext scenarioContext)
     }
 
     [Then("I am back on the home page \\(logged out state)")]
-    public void ThenIAmBackOnTheHomePageLoggedOutState()
+    public void BackOnTheHomePageLoggedOutState()
     {
         var homePage = GetCurrentPage<HomePage>();
         SetCurrentPage(homePage);
