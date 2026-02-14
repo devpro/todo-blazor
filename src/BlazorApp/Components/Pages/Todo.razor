@@ -260,10 +260,10 @@
 
     private async Task SaveEditAsync(TodoItem todo)
     {
-        var newTitle = editTitle?.Trim();
+        var newVal = editTitle?.Trim();
         if (editingId != todo.Id
-            || string.IsNullOrEmpty(newTitle)
-            || newTitle == todo.Title)
+            || string.IsNullOrEmpty(newVal)
+            || newVal == todo.Title)
         {
             editingId = null;
             editTitle = null;
@@ -271,7 +271,7 @@
         }
 
         var originalTitle = todo.Title;
-        todo.Title = newTitle;
+        todo.Title = newVal;
         try
         {
             await TodoItemRepository.UpdateAsync(todo);
