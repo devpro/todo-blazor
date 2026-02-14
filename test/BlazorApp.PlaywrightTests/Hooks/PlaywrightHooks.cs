@@ -18,7 +18,7 @@ public class PlaywrightHooks
         s_playwrightInstance = await Playwright.CreateAsync();
         s_browser = await s_playwrightInstance.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            Headless = true,
+            Headless = false,
             SlowMo = 0
         });
         s_appFixture = new BlazorAppFixture();

@@ -25,18 +25,18 @@ public abstract class PageBase(IPage page)
 
     // assertions
 
-    public async Task WaitForReadyAsync()
+    public virtual async Task WaitForReadyAsync()
     {
         await Assertions.Expect(Page).ToHaveTitleAsync(WebPageTitle);
         await Assertions.Expect(PageHeader).ToBeVisibleAsync();
     }
 
-    public async Task VerifyPageHeaderAsync(string header)
+    public virtual async Task VerifyPageHeaderAsync(string header)
     {
         await Assertions.Expect(PageHeader).ToHaveTextAsync(header);
     }
 
-    public async Task VerifyPageHeaderAsync(Regex header)
+    public virtual async Task VerifyPageHeaderAsync(Regex header)
     {
         await Assertions.Expect(PageHeader).ToHaveTextAsync(header);
     }

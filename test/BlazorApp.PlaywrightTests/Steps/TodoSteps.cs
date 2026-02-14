@@ -11,6 +11,6 @@ public class TodoSteps(ScenarioContext scenarioContext)
     public async Task AddTodo(string todo)
     {
         var todoPage = GetCurrentPage<TodoPage>();
-        await todoPage.AddItem(todo);
+        await todoPage.AddItemAsync(todo);
     }
 }

@@ -1,11 +1,9 @@
 ﻿@page "/todo"
 
-@using Devpro.TodoList.BlazorApp.Components.Account
 @using Devpro.TodoList.BlazorApp.Identity
 @using Devpro.TodoList.BlazorApp.Models
 @using Devpro.TodoList.BlazorApp.Repositories
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
 
 @inject UserManager<ApplicationUser> UserManager
@@ -19,114 +17,117 @@
 <PageTitle>Todo</PageTitle>
 
 <div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
+    <h1 class="mb-4">Todo <span class="badge bg-primary">@todos.Count(t => !t.IsDone)</span></h1>
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="mb-0 d-flex justify-content-between align-items-center">
-                        Todo
-                        <span class="badge bg-light text-primary fs-5">
-                            @todos.Count(todo => !todo.IsDone)
-                        </span>
-                    </h1>
-                </div>
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3 mb-0" role="alert">
+            @errorMessage
+        </div>
+    }
 
-                <div class="card-body p-0">
-                    @if (todos.Any())
-                    {
-                        <ul class="list-group list-group-flush">
-                            @foreach (var todo in todos)
-                            {
-                                <li class="list-group-item d-flex align-items-center px-3 py-3">
-                                    <div class="form-check me-3">
-                                        <input class="form-check-input mt-1 fs-5"
-                                               type="checkbox"
-                                               id="chk-@todo.Id"
-                                               @bind:get="todo.IsDone"
-                                               @bind:set="@(async value => await CheckTodoAsync(todo, value))" />
-                                    </div>
+    @if (isReady)
+    {
+        @if (isLoading)
+        {
+            <div class="alert alert-info text-center my-4" data-testid="loading-message">
+                Loading your tasks...
+            </div>
+        }
+        else
+        {
+            <div class="input-group mb-4">
+                <input type="text" class="form-control" id="new-title" data-testid="new-todo-input" disabled="@isLoading" placeholder="What needs to be done?"
+                       @bind="newTitle" @bind:event="oninput"
+                       @onkeyup="@(e =>
+                       {
+                           if (e.Key == "Enter" || e.Key == "NumpadEnter")
+                           {
+                               _ = AddTodoAsync();
+                           }
+                       })" />
 
-                                    @if (editingTodo?.Id == todo.Id)
-                                    {
-                                        <input type="text"
-                                               class="form-control form-control-sm flex-grow-1 me-2"
-                                               value="@editingTitle"
-                                               @oninput="@(e => editingTitle = e.Value?.ToString() ?? "")"
-                                               @onblur="@(async () => await SaveTitleAsync(todo))"
-                                               @onkeyup="@(async e => { if (e.Key == "Enter") await SaveTitleAsync(todo); })"
-                                               autofocus />
-                                    }
-                                    else
-                                    {
-                                        <div class="flex-grow-1 @(todo.IsDone ? "text-muted text-decoration-line-through" : "")"
-                                             style="cursor: text; min-height: 2rem; line-height: 1.6;"
-                                             @onclick="@(() => StartEditAsync(todo))">
-                                            @todo.Title
-                                        </div>
-                                    }
-
-                                    <button class="btn btn-sm btn-danger ms-2"
-                                            title="Delete this task"
-                                            @onclick="@(() => ShowDeleteConfirmAsync(todo))">
-                                        Delete
-                                    </button>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5 text-muted">
-                            <p class="lead">No tasks yet</p>
-                            <small>Add something to do below</small>
-                        </div>
-                    }
-                </div>
-
-                <div class="card-footer bg-light">
-                    <div class="input-group input-group-lg">
-                        <input type="text"
-                               class="form-control"
-                               placeholder="Something todo"
-                               @bind="newTodo" />
-
-                        <button class="btn btn-primary"
-                                type="button"
-                                @onclick="AddTodoAsync"
-                                disabled="@(string.IsNullOrWhiteSpace(newTodo))">
-                            Add todo
-                        </button>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(errorMessage))
-                    {
-                        <div class="alert alert-danger mt-3 mb-0" role="alert">
-                            @errorMessage
-                        </div>
-                    }
-                </div>
+                <button class="btn btn-primary" id="add-btn" data-testid="add-button" @onclick="AddTodoAsync"
+                        disabled="@string.IsNullOrWhiteSpace(newTitle?.Trim())">
+                    Add
+                </button>
             </div>
 
-        </div>
-    </div>
+            @if (!todos.Any())
+            {
+                <div class="alert alert-info text-center">No tasks yet — add one above!</div>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var todo in todos)
+                    {
+                        <li class="list-group-item d-flex align-items-center" data-todo-id="@todo.Id" data-testid="todo-row"
+                            @onkeyup="@(e => HandleKeyUpAsync(e, todo))">
+
+                            <input type="checkbox" class="form-check-input me-3 fs-5" data-testid="done-checkbox"
+                                   id="chk-@todo.Id" @bind="todo.IsDone"
+                                   @bind:after="@(() => _ = ToggleDoneAsync(todo))" />
+
+                            @if (editingId == todo.Id)
+                            {
+                                <input type="text"
+                                       class="form-control me-2 flex-grow-1"
+                                       value="@editTitle"
+                                       @oninput="@(e => editTitle = e.Value?.ToString() ?? "")"
+                                       autofocus />
+
+                                <button class="btn btn-sm btn-success me-1" data-testid="save-button"
+                                        @onclick="() => _ = SaveEditAsync(todo)">
+                                    Save
+                                </button>
+
+                                <button class="btn btn-sm btn-secondary" data-testid="cancel-button"
+                                        @onclick="CancelEdit">
+                                    Cancel
+                                </button>
+                            }
+                            else
+                            {
+                                <div class="flex-grow-1 me-3 d-flex align-items-center" style="min-height: 38px;">
+                                    <span class="@(todo.IsDone ? "text-muted text-decoration-line-through" : "")">
+                                        @todo.Title
+                                    </span>
+                                </div>
+
+                                <button class="btn btn-sm btn-outline-primary me-1" data-testid="edit-button"
+                                        @onclick="() => StartEdit(todo)">
+                                    Edit
+                                </button>
+
+                                <button class="btn btn-sm btn-outline-danger" id="del-@todo.Id" data-testid="delete-button"
+                                        @onclick="() => ShowDelete(todo)">
+                                    Delete
+                                </button>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    }
 </div>
 
 @if (todoToDelete != null)
 {
-    <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal fade show d-block" data-testid="delete-confirmation-modal" tabindex="-1" style="background:rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Delete</h5>
-                    <button type="button" class="btn-close" @onclick="CancelDeleteAsync"></button>
+                    <h5>Confirm Delete</h5>
+                    <button class="btn-close" @onclick="CancelDelete"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete "<strong>@todoToDelete.Title</strong>"?
+                    Delete "<strong>@todoToDelete.Title</strong>"?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CancelDeleteAsync">Cancel</button>
-                    <button type="button" class="btn btn-danger" @onclick="ConfirmDeleteAsync">Delete</button>
+                    <button class="btn btn-secondary" data-testid="cancel-delete" @onclick="CancelDelete">Cancel</button>
+                    <button class="btn btn-danger" data-testid="confirm-delete" @onclick="ConfirmDeleteAsync">Delete</button>
                 </div>
             </div>
         </div>
@@ -137,15 +138,25 @@
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
 
+    private bool isReady = false;
+    private bool isLoading = true;
     private ApplicationUser? user;
     private List<TodoItem> todos = [];
-    private string? newTodo;
+    private string? newTitle;
+    private string? editingId;
+    private string? editTitle;
+    private TodoItem? todoToDelete;
     private string? errorMessage;
 
-    private TodoItem? editingTodo;
-    private string? editingTitle;
-
-    private TodoItem? todoToDelete;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1);
+            isReady = true;
+            StateHasChanged();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -157,26 +168,39 @@
         }
 
         await LoadTodoAsync(userId);
+
+        isLoading = false;
+    }
+
+    private async Task HandleKeyUpAsync(KeyboardEventArgs e, TodoItem todo)
+    {
+        if (e.Key == "Enter" || e.Key == "NumpadEnter")
+        {
+            await SaveEditAsync(todo);
+        }
+        else if (e.Key == "Escape")
+        {
+            CancelEdit();
+        }
     }
 
     private async Task AddTodoAsync()
     {
+        var title = newTitle?.Trim();
         var userId = await GetCurrentUserIdAsync();
-        if (string.IsNullOrEmpty(userId))
+        if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(userId))
         {
             return;
         }
 
-        if (!string.IsNullOrWhiteSpace(newTodo))
-        {
-            var todoItem = new TodoItem { Title = newTodo, UserId = userId };
-            await TodoItemRepository.CreateAsync(todoItem);
-            await LoadTodoAsync(userId);
-            newTodo = string.Empty;
-        }
+        var todoItem = new TodoItem { Title = title, IsDone = false, UserId = userId };
+        await TodoItemRepository.CreateAsync(todoItem);
+        await LoadTodoAsync(userId);
+        newTitle = null;
+        StateHasChanged();
     }
 
-    private async Task CheckTodoAsync(TodoItem todoItem, bool isDone)
+    private async Task ToggleDoneAsync(TodoItem todoItem)
     {
         var userId = await GetCurrentUserIdAsync();
         if (string.IsNullOrEmpty(userId) || todoItem.UserId != userId)
@@ -184,25 +208,25 @@
             return;
         }
 
-        todoItem.IsDone = isDone;
         await TodoItemRepository.UpdateAsync(todoItem);
     }
 
-
-
-    private void ShowDeleteConfirmAsync(TodoItem todo)
+    private void ShowDelete(TodoItem todoItem)
     {
-        todoToDelete = todo;
+        todoToDelete = todoItem;
     }
 
-    private void CancelDeleteAsync()
+    private void CancelDelete()
     {
         todoToDelete = null;
     }
 
     private async Task ConfirmDeleteAsync()
     {
-        if (todoToDelete == null) return;
+        if (todoToDelete == null)
+        {
+            return;
+        }
 
         var todo = todoToDelete;
         todoToDelete = null;
@@ -211,10 +235,9 @@
         {
             await TodoItemRepository.DeleteAsync(todo.Id);
             todos.Remove(todo);
-            if (editingTodo?.Id == todo.Id)
+            if (editingId == todo.Id)
             {
-                editingTodo = null;
-                editingTitle = null;
+                editingId = null;
             }
         }
         catch
@@ -223,32 +246,32 @@
         }
     }
 
-    private void StartEditAsync(TodoItem todo)
+    private void StartEdit(TodoItem todo)
     {
-        editingTodo = todo;
-        editingTitle = todo.Title;
+        editingId = todo.Id;
+        editTitle = todo.Title;
     }
 
-    private async Task SaveTitleAsync(TodoItem todo)
+    private void CancelEdit()
     {
-        if (editingTodo?.Id != todo.Id || string.IsNullOrWhiteSpace(editingTitle))
-        {
-            editingTodo = null;
-            editingTitle = null;
-            return;
-        }
+        editingId = null;
+        editTitle = null;
+    }
 
-        var newTitle = editingTitle.Trim();
-        if (newTitle == todo.Title)
+    private async Task SaveEditAsync(TodoItem todo)
+    {
+        var newTitle = editTitle?.Trim();
+        if (editingId != todo.Id
+            || string.IsNullOrEmpty(newTitle)
+            || newTitle == todo.Title)
         {
-            editingTodo = null;
-            editingTitle = null;
+            editingId = null;
+            editTitle = null;
             return;
         }
 
         var originalTitle = todo.Title;
         todo.Title = newTitle;
-
         try
         {
             await TodoItemRepository.UpdateAsync(todo);
@@ -259,8 +282,8 @@
             errorMessage = "Could not save the title.";
         }
 
-        editingTodo = null;
-        editingTitle = null;
+        editingId = null;
+        editTitle = null;
     }
 
     private async Task<string?> GetCurrentUserIdAsync()

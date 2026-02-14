@@ -45,6 +45,15 @@ public class WalkthroughTest(BlazorAppFactory factory) : PageTest(), IClassFixtu
             loginPage = await registerConfirmPage.OpenLoginAsync();
             await loginPage.EnterCredentialsAsync(userInfo.Email, userInfo.Password);
             homePage = await loginPage.SubmitAndVerifySuccessAsync();
+
+            var todoPage = await homePage.OpenTodoAsync();
+            var task1 = _faker.Random.String();
+            await todoPage.AddItemAsync(task1);
+            await todoPage.ToggleDoneAsync(task1);
+            await todoPage.EditTodoAsync(task1, task1 + " oups");
+            await todoPage.CancelEditAsync(task1 + " oups");
+            await todoPage.DeleteTodoAsync(task1 + " oups");
+
             await homePage.ClickLogoutAsync();
         }
         catch (Exception)
