@@ -419,3 +419,6 @@ FodyWeavers.xsd
 
 # Reqnroll generated files
 *.feature.cs
+
+# JetBrains IDE (Rider)
+.idea/*

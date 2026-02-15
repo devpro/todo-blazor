@@ -1,17 +1,24 @@
-﻿using Devpro.Common.MongoDb;
-using Devpro.TodoList.BlazorApp.Components;
+﻿using Devpro.TodoList.BlazorApp.Components;
 using Devpro.TodoList.BlazorApp.Components.Account;
+using Devpro.TodoList.BlazorApp.Configuration;
 using Devpro.TodoList.BlazorApp.Identity;
 using Devpro.TodoList.BlazorApp.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
-builder.Services.Configure<DatabaseSettings>(databaseSettings);
+var databaseSettings = new DatabaseSettings
+{
+    ConnectionString = builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString")
+                       ?? throw new InvalidOperationException("Connection string must be defined in configuration"),
+    DatabaseName = builder.Configuration.GetValue<string>("DatabaseSettings:DatabaseName")
+                   ?? throw new InvalidOperationException("Database name must be defined in configuration")
+};
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -28,10 +35,9 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMongoDB(
-        databaseSettings.Get<DatabaseSettings>()?.ConnectionString ?? throw new Exception("Connection string not defined"),
-        databaseSettings.Get<DatabaseSettings>()?.DatabaseName ?? throw new Exception("Database name string not defined"))
-    .EnableSensitiveDataLogging());
+    options
+        .UseMongoDB(databaseSettings.ConnectionString, databaseSettings.DatabaseName)
+        .EnableSensitiveDataLogging());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
@@ -47,7 +53,22 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddTransient<IUserStore<ApplicationUser>, UserStore>();
 builder.Services.AddTransient<IRoleStore<IdentityRole<ObjectId>>, RoleStore<IdentityRole<ObjectId>>>();
 
-builder.Services.AddSingleton<IMongoClientFactory, DefaultMongoClientFactory>();
+builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var pack = new ConventionPack
+    {
+        new CamelCaseElementNameConvention(),
+        new EnumRepresentationConvention(BsonType.String),
+        new IgnoreExtraElementsConvention(true),
+        new IgnoreIfNullConvention(true)
+    };
+    ConventionRegistry.Register("Conventions", pack, t => true);
+    return new MongoClient(databaseSettings.ConnectionString);
+});
+
+builder.Services.AddSingleton<IMongoDatabase>(sp
+    => sp.GetRequiredService<IMongoClient>().GetDatabase(databaseSettings.DatabaseName));
+
 builder.Services.AddScoped<TodoItemRepository>();
 
 builder.Services.AddHealthChecks()

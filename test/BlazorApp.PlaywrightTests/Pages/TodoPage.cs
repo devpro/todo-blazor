@@ -19,7 +19,7 @@ public class TodoPage(IPage page) : PageBase(page)
 
     public ILocator TodoRows => Page.GetByTestId("todo-row");
 
-    public ILocator GetTodoRow(string title) => TodoRows.Filter(new() { HasText = "Buy milk" });
+    public ILocator GetTodoRow(string title) => TodoRows.Filter(new() { HasText = title });
 
     public ILocator GetDoneCheckbox(string title) => GetTodoRow(title).GetByTestId("done-checkbox");
 
