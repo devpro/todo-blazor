@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <AssemblyName>Devpro.TodoList.BlazorApp.IntegrationTests</AssemblyName>
-    <RootNamespace>Devpro.TodoList.BlazorApp.IntegrationTests</RootNamespace>
-    <ProjectGuid>{0245D59A-2624-42E2-A67A-D87F252F8F72}</ProjectGuid>
+    <AssemblyName>Devpro.TodoList.BlazorApp.PlaywrightTests</AssemblyName>
+    <RootNamespace>Devpro.TodoList.BlazorApp.PlaywrightTests</RootNamespace>
+    <ProjectGuid>{950EF102-FA19-414B-A05B-6C9FD00FF78C}</ProjectGuid>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -12,11 +12,16 @@
 
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="Bogus" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="JunitXml.TestLogger" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Playwright" />
+    <PackageReference Include="Microsoft.Playwright.Xunit.v3" />
     <PackageReference Include="Microsoft.Testing.Platform" />
+    <PackageReference Include="Reqnroll" />
+    <PackageReference Include="Reqnroll.xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BlazorApp\BlazorApp.csproj" />
+    <ProjectReference Include="..\..\src\Common.Mvc.Testing\Common.Mvc.Testing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

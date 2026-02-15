@@ -1,39 +1,48 @@
-﻿# purpose: Continuous Integration pipeline
-# actions: [build, unit test, lint, scan]
-# variables: [SONAR_ORG, SONAR_PROJECT_KEY]
-# secrets: [SONAR_TOKEN]
-name: CI
+﻿name: CI
+# description: Continuous Integration pipeline
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      run-code-quality:
+        description: 'Check code quality?'
+        required: false
+        type: boolean
+        default: false
+      run-image-scan:
+        description: 'Scan container image?'
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
-  group: "ci"
+  group: "${{ github.ref }}-ci"
   cancel-in-progress: true
-
-permissions:
-  contents: read
-  pull-requests: write
 
 jobs:
   git-check:
     name: Git
     uses: ./.github/workflows/reusable-git-check.yml
+    with:
+      is-pull-request: ${{ github.event_name == 'pull_request' }}
 
   content-validate:
     name: Markup
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@66ea6a268db75a8461decb7988894823d4fcc7de
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
 
   code-quality:
     name: Code
     needs: git-check
-    if: github.event_name == 'workflow_dispatch' || needs.git-check.outputs.app_changed == 'true'
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@66ea6a268db75a8461decb7988894823d4fcc7de
+    if: needs.git-check.outputs.app_changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.run-code-quality)
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
     with:
+      custom-commands: |
+        dotnet build --no-restore --configuration Debug test/BlazorApp.PlaywrightTests
+        pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 install --with-deps
       extra-vars: |
         Application__IsHttpsRedirectionEnabled="false"
       mongodb-enabled: true
@@ -42,22 +51,20 @@ jobs:
       sonar-organization: ${{ vars.SONAR_ORG }}
       sonar-project-key: ${{ vars.SONAR_PROJECT_KEY }}
       sonar-project-name: Todo Blazor
-      workflow-parts-version: 66ea6a268db75a8461decb7988894823d4fcc7de
     secrets:
       fossa-api-key: ${{ secrets.FOSSA_API_KEY }}
       sonar-token: ${{ secrets.SONAR_TOKEN }}
+    permissions:
+      contents: read
+      pull-requests: write
 
   image-scan:
     name: Image
     needs: git-check
-    if: github.event_name == 'workflow_dispatch' || needs.git-check.outputs.app_changed == 'true'
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@66ea6a268db75a8461decb7988894823d4fcc7de
+    if: needs.git-check.outputs.app_changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.run-image-scan)
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
     with:
       image-definition: "src/BlazorApp/Dockerfile"
-      image-tag: 1.0.${{ github.run_id }}
-      image-path: "docker.io/devprofr"
-      image-name: todoblazor
-      # temp trivy fix with ignoring vulnerability SUSE-SU-2026:0215-1
-      trivy-enabled: false
-      max-high-cves: 0
-      max-medium-cves: 0
+      image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
+      image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
+      image-tag: "${{ needs.git-check.outputs.version_major_minor }}.${{ github.run_id }}"

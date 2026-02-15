@@ -9,7 +9,7 @@ public class TodoItem
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
 
-    public string UserId { get; set; } = string.Empty;
+    public string UserId { get; init; } = null!;
 
     public string Title { get; set; } = string.Empty;
 

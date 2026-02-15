@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Devpro.Common.Mvc.Testing</AssemblyName>
+    <RootNamespace>Devpro.Common.Mvc.Testing</RootNamespace>
+    <ProjectGuid>{52C1F6D3-76B9-4A89-A0FB-E7183580E90F}</ProjectGuid>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+  </ItemGroup>
+
+</Project>

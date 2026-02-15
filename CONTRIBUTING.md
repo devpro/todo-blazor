@@ -12,7 +12,7 @@
 - [x] CI/CD
 - [x] Badges in README
 - [x] Secret check (GitGuardian)
-- [ ] Health check (with db check)
+- [x] Health check (with db check)
 - [ ] End-to-end tests (Playwright)
 - [ ] Unit tests (.NET)
 - [ ] Code indentation review (in particular js/css files)
@@ -21,7 +21,8 @@
 
 NuGet packages:
 
-- Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9
+- Open: xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
+- Resolved: Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9
 
 ## Run locally
 
@@ -101,6 +102,43 @@ docker compose up --build
 docker compose down
 ```
 
+### Test setup
+
+Make sure PowerShell 7+ is installed:
+
+```dos
+winget install --id Microsoft.PowerShell --source winget
+```
+
+Install required browsers:
+
+```dos
+pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net8.0/playwright.ps1 install
+```
+
+Generate tests with:
+
+```dos
+pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 codegen https://localhost:7099/
+```
+
+<!--
+using var playwright = await Playwright.CreateAsync();
+await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = false });
+var page = await browser.NewPageAsync();
+await page.GotoAsync("https://playwright.dev/dotnet");
+await page.ScreenshotAsync(new() { Path = "screenshot.png" });
+-->
+
+## Rider
+
+Remove duplication in the test view:
+
+> In File > Settings > Build, Execution, Deployment > Unit Testing > VSTest, uncheck 'Enable VSTest adapters support'
+> ([xunit/visualstudio.xunit/issues/436](https://github.com/xunit/visualstudio.xunit/issues/436#issuecomment-2687240662))
+
+This is defined in `TodoBlazor.sln.DotSettings`.
+
 ## References
 
 .NET documentation:
@@ -114,7 +152,7 @@ Blazor samples ([Blazor movie database app](https://learn.microsoft.com/en-us/as
 
 ```bash
 git clone https://github.com/dotnet/blazor-samples.git
-cd blazor-samples\10.0\BlazorWebAppMovies
+cd blazor-samples/10.0/BlazorWebAppMovies
 dotnet tool restore
 dotnet ef database update
 dotnet run

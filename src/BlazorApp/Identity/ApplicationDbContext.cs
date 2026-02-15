@@ -13,8 +13,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<ApplicationUser>()
-            .ToCollection("users");
+        builder.Entity<ApplicationUser>().ToCollection("users");
 
         builder.Entity<ApplicationUser>(b =>
         {
@@ -33,6 +32,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             b.Property(u => u.LockoutEnd).HasElementName("lockout_end");
             b.Property(u => u.LockoutEnabled).HasElementName("is_lockout_enabled");
             b.Property(u => u.AccessFailedCount).HasElementName("accessfailedcount");
+        });
+
+        builder.Entity<IdentityUserPasskey<ObjectId>>(b =>
+        {
+            b.ToCollection("user_passkeys");
+
+            b.Property(p => p.CredentialId).HasElementName("_id");
+            b.Property(p => p.UserId).HasElementName("user_id");
         });
     }
 }

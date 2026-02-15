@@ -1,6 +1,4 @@
-﻿using Devpro.Common.MongoDb;
-using Devpro.TodoList.BlazorApp.Models;
-using Microsoft.Extensions.Options;
+﻿using Devpro.TodoList.BlazorApp.Models;
 using MongoDB.Driver;
 
 namespace Devpro.TodoList.BlazorApp.Repositories;
@@ -9,8 +7,8 @@ public class TodoItemRepository : RepositoryBase
 {
     private readonly IMongoCollection<TodoItem> _todoItems;
 
-    public TodoItemRepository(IMongoClientFactory mongoClientFactory, ILogger<TodoItemRepository> logger, IOptions<DatabaseSettings> databaseSettings)
-        : base(mongoClientFactory, logger, databaseSettings.Value)
+    public TodoItemRepository(IMongoDatabase mongoDatabase, ILogger<TodoItemRepository> logger)
+        : base(mongoDatabase, logger)
     {
         _todoItems = GetCollection<TodoItem>();
     }

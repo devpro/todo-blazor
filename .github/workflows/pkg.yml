@@ -1,8 +1,5 @@
-# purpose: Continuous Delivery (aka Packaging & Shipping)
-# actions: [build, push]
-# variables: []
-# secrets: [DOCKERHUB_USERNAME, DOCKERHUB_TOKEN]
 name: PKG
+# description: Continuous Delivery (aka Packaging & Shipping)
 
 on:
   push:
@@ -21,17 +18,17 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-publication.yml@66ea6a268db75a8461decb7988894823d4fcc7de
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-publication.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
     with:
       create-latest: ${{ github.ref_name == 'main' }}
       extra-build-arguments: >-
         --secret id=additional_file_name,env=ADDITIONAL_FILE_NAME
         --secret id=additional_file_content,env=ADDITIONAL_FILE_CONTENT
       image-definition: "src/BlazorApp/Dockerfile"
-      image-name: todoblazor
-      image-path: "docker.io/devprofr"
-      image-tag: 1.0.${{ github.run_id }}
-      workflow-parts-version: 66ea6a268db75a8461decb7988894823d4fcc7de
+      image-name: ${{ vars.CONTAINER_IMAGE_NAME }}
+      image-path: ${{ vars.CONTAINER_REGISTRY_PATH }}
+      image-tag: "${{ needs.git-check.outputs.version_major_minor }}.${{ github.run_id }}"
+      workflow-parts-version: f61750746227ea28ae379e5a36ad52096fb34967
     secrets:
       container-registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
       container-registry-username: ${{ secrets.DOCKERHUB_USERNAME }}

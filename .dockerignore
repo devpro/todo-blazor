@@ -23,3 +23,14 @@
 **/values.dev.yaml
 LICENSE
 README.md
+CONTRIBUTING.md
+**/*.suo
+**/TestResults
+**/*.log
+**/publish
+**/docs
+**/samples
+**/.github
+**/test
+**/.editorconfig
+**/.*.y*ml

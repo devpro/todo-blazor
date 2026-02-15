@@ -11,21 +11,37 @@ A simple todo list that runs as a web application (written with Blazor / C# / .N
 
 For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions are more than welcome 🙂
 
-## Artifacts
+## Getting started
 
-### Container images
+Run the web application in a container:
 
-All images pushed to DockerHub are signed using Cosign (keyless mode via GitHub OIDC).
+```bash
+docker run --rm -p 9001:8080 -e DatabaseSettings__ConnectionString=$MONGODB_CONNSTRING docker.io/devprofr/todoblazor:1.0.21711317943
+```
+
+Open [localhost:9001](http://localhost:9001)
+
+Configuration:
+
+- MONGODB_CONNSTRING
+  
+  - `mongodb://localhost:27017` if local MongoDB without authentication (for example with `docker run --name mongodb8 -d -p 27017:27017 mongo:8.2`)
+
+## Operations
+
+### Checking image signature
+
+<!--All images pushed to DockerHub are signed using Cosign (keyless mode via GitHub OIDC).-->
 
 ```bash
 # predicts signature location
 docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
-  triangulate docker.io/devprofr/todoblazor:1.0.21564931504
+  triangulate docker.io/devprofr/todoblazor:1.0.21711317943
 
 # verifies signature (recommended)
 docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
   verify \
     --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
     --certificate-identity-regexp="https://github.com/devpro/todo-blazor/.github/workflows/pkg.yml@.*" \
-    docker.io/devprofr/todoblazor:1.0.21564931504
+    docker.io/devprofr/todoblazor:1.0.21711317943
 ```

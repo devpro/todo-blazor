@@ -3,12 +3,22 @@
     <File Path=".dockerignore" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path=".markdownlint.yml" />
+    <File Path=".yamllint.yaml" />
     <File Path="compose.override.yaml" />
     <File Path="compose.yaml" />
     <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Solution Items/pipelines/">
+    <File Path=".github/workflows/ci.yml" />
+    <File Path=".github/workflows/pkg.yml" />
+    <File Path=".github/workflows/reusable-git-check.yml" />
+  </Folder>
   <Project Path="src/BlazorApp/BlazorApp.csproj" />
-  <Project Path="src/Common.MongoDb/Common.MongoDb.csproj" Id="c066cf9d-51d8-4a5f-aad6-3d62f3f9bc49" />
+  <Project Path="src/Common.Mvc.Testing/Common.Mvc.Testing.csproj" Id="170a8be9-ea28-4f51-a1aa-cf85e596f9da" />
   <Project Path="test/BlazorApp.IntegrationTests/BlazorApp.IntegrationTests.csproj" Id="b9481220-a5c1-41e1-b51f-02f0f0d19191" />
+  <Project Path="test/BlazorApp.PlaywrightTests/BlazorApp.PlaywrightTests.csproj" Id="3c327f37-f47f-4c2d-a834-715a7f94c366" />
 </Solution>
