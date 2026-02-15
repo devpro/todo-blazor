@@ -130,6 +130,15 @@ await page.GotoAsync("https://playwright.dev/dotnet");
 await page.ScreenshotAsync(new() { Path = "screenshot.png" });
 -->
 
+## Rider
+
+Remove duplication in the test view:
+
+> In File > Settings > Build, Execution, Deployment > Unit Testing > VSTest, uncheck 'Enable VSTest adapters support'
+> ([xunit/visualstudio.xunit/issues/436](https://github.com/xunit/visualstudio.xunit/issues/436#issuecomment-2687240662))
+
+This is defined in `TodoBlazor.sln.DotSettings`.
+
 ## References
 
 .NET documentation:

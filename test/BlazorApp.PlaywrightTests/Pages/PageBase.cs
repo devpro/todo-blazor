@@ -67,6 +67,14 @@ public abstract class PageBase(IPage page)
         return homePage;
     }
 
+    public async Task<LoginPage> ClickLogoutFromAuthorizedAsync()
+    {
+        await LogoutLink.ClickAsync();
+        var loginPage = new LoginPage(Page);
+        await loginPage.WaitForReadyAsync();
+        return loginPage;
+    }
+
     public async Task<TodoPage> OpenTodoAsync()
     {
         await TodoLink.ClickAsync();

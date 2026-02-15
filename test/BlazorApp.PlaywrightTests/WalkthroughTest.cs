@@ -8,7 +8,6 @@ namespace Devpro.TodoList.BlazorApp.PlaywrightTests;
 
 public class WalkthroughTest(BlazorAppFactory factory) : PageTest(), IClassFixture<BlazorAppFactory>
 {
-    private readonly BlazorAppFactory _factory = factory;
     private readonly Faker _faker = new();
 
     public override async ValueTask InitializeAsync()
@@ -27,7 +26,7 @@ public class WalkthroughTest(BlazorAppFactory factory) : PageTest(), IClassFixtu
         try
         {
             var homePage = new HomePage(Page);
-            await homePage.NavigateToAsync(_factory.ServerAddress);
+            await homePage.NavigateToAsync(factory.ServerAddress);
             await homePage.VerifyPageHeaderAsync("Hello, world!");
 
             var loginPage = await homePage.OpenLoginAsync();
@@ -47,14 +46,14 @@ public class WalkthroughTest(BlazorAppFactory factory) : PageTest(), IClassFixtu
             homePage = await loginPage.SubmitAndVerifySuccessAsync();
 
             var todoPage = await homePage.OpenTodoAsync();
-            var task1 = _faker.Random.String();
+            var task1 = _faker.Company.CatchPhrase();
             await todoPage.AddItemAsync(task1);
             await todoPage.ToggleDoneAsync(task1);
-            await todoPage.EditTodoAsync(task1, task1 + " oups");
+            await todoPage.EditAsync(task1, task1 + " oups");
             await todoPage.CancelEditAsync(task1 + " oups");
-            await todoPage.DeleteTodoAsync(task1 + " oups");
+            await todoPage.DeleteAsync(task1 + " oups");
 
-            await homePage.ClickLogoutAsync();
+            await homePage.ClickLogoutFromAuthorizedAsync();
         }
         catch (Exception)
         {

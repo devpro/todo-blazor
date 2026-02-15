@@ -48,7 +48,7 @@ public class AuthenticationSteps(ScenarioContext scenarioContext)
         await OnTheHomePageAfterSuccessfulLogin();
     }
 
-    [When("I click logout")]
+    [When("I click logout from the home page")]
     public async Task ClickLogout()
     {
         var currentPage = GetCurrentPage<PageBase>();
@@ -56,7 +56,7 @@ public class AuthenticationSteps(ScenarioContext scenarioContext)
         SetCurrentPage(homePage);
     }
 
-    [Then("I am back on the home page \\(logged out state)")]
+    [Then("I am back on the home page")]
     public void BackOnTheHomePageLoggedOutState()
     {
         var homePage = GetCurrentPage<HomePage>();

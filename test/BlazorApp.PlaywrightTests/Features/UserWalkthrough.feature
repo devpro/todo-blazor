@@ -12,5 +12,5 @@
     When I click the confirmation link
     And I login with the registered credentials
     Then I am on the home page after successful login
-    When I click logout
-    Then I am back on the home page (logged out state)
+    When I click logout from the home page
+    Then I am back on the home page

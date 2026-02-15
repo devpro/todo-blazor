@@ -11,37 +11,37 @@ public class TodoPage(IPage page) : PageBase(page)
 
     // locators
 
-    private ILocator NewInput => Page.GetByTestId("new-todo-input");
+    private ILocator NewInput => Page.GetByTestId("new-input");
 
     private ILocator AddButton => Page.GetByTestId("add-button");
 
     private ILocator LoadingSpinner => Page.GetByTestId("loading-message");
 
-    public ILocator TodoRows => Page.GetByTestId("todo-row");
+    private ILocator Rows => Page.Locator("ul.list-group > li");
 
-    public ILocator GetTodoRow(string title) => TodoRows.Filter(new() { HasText = title });
+    private ILocator GetRow(string title) => Rows.Filter(new() { HasText = title });
 
-    public ILocator GetDoneCheckbox(string title) => GetTodoRow(title).GetByTestId("done-checkbox");
+    private ILocator GetDoneCheckbox(string title) => GetRow(title).GetByRole(AriaRole.Checkbox);
 
-    public ILocator GetEditButton(string title) => GetTodoRow(title).GetByTestId("edit-button");
+    private ILocator GetEditButton(string title) => GetRow(title).GetByRole(AriaRole.Button, new() { Name = "Edit" });
 
-    public ILocator GetDeleteButton(string title) => GetTodoRow(title).GetByTestId("delete-button");
+    private ILocator GetDeleteButton(string title) => GetRow(title).GetByRole(AriaRole.Button, new() { Name = "Delete" });
 
-    public ILocator GetEditInput(string title) => GetTodoRow(title).Locator("input[type='text']");
+    private ILocator GetEditInput(string title) => GetRow(title).GetByRole(AriaRole.Textbox);
 
-    public ILocator GetSaveButton(string title) => GetTodoRow(title).GetByTestId("save-button");
+    private ILocator GetSaveButton(string title) => GetRow(title).GetByRole(AriaRole.Button, new() { Name = "Save" });
 
-    public ILocator GetCancelButton(string title) => GetTodoRow(title).GetByTestId("cancel-button");
+    private ILocator GetCancelButton(string title) => GetRow(title).GetByRole(AriaRole.Button, new() { Name = "Cancel" });
 
-    public ILocator DeleteModal => Page.GetByTestId("delete-confirmation-modal");
+    private ILocator DeleteModal => Page.GetByTestId("delete-confirmation-modal");
 
-    public ILocator ConfirmDeleteButton => DeleteModal.GetByRole(AriaRole.Button, new() { Name = "Delete" });
+    private ILocator ConfirmDeleteButton => Page.GetByTestId("confirm-delete");
 
-    public ILocator CancelDeleteButton => DeleteModal.GetByRole(AriaRole.Button, new() { Name = "Cancel" });
+    public ILocator CancelDeleteButton => Page.GetByTestId("cancel-delete");
 
     // actions
 
-    public async override Task WaitForReadyAsync()
+    public override async Task WaitForReadyAsync()
     {
         await Assertions.Expect(LoadingSpinner).ToBeHiddenAsync();
 
@@ -62,11 +62,11 @@ public class TodoPage(IPage page) : PageBase(page)
         }
         else
         {
-            await Assertions.Expect(AddButton).ToBeEnabledAsync(new() { Timeout = 100 });
+            await Assertions.Expect(AddButton).ToBeEnabledAsync();
             await AddButton.ClickAsync();
         }
 
-        await Assertions.Expect(GetTodoRow(todo)).ToBeVisibleAsync();
+        await Assertions.Expect(GetRow(todo)).ToBeVisibleAsync();
     }
 
     public async Task ToggleDoneAsync(string title)
@@ -74,30 +74,40 @@ public class TodoPage(IPage page) : PageBase(page)
         await GetDoneCheckbox(title).CheckAsync();
     }
 
-    public async Task EditTodoAsync(string title, string newTitle)
+    public async Task EditAsync(string title, string newTitle)
     {
-        await GetEditButton(title).ClickAsync();
-        await GetEditInput(title).FillAsync(newTitle);
-        await GetSaveButton(title).ClickAsync();
-        await Assertions.Expect(GetTodoRow(newTitle)).ToBeVisibleAsync();
-    }
-
-    public async Task DeleteTodoAsync(string title)
-    {
-        await GetDeleteButton(title).ClickAsync();
-        await ConfirmDeleteButton.ClickAsync();
-        await Assertions.Expect(GetTodoRow(title)).ToBeHiddenAsync(new() { Timeout = 10000 });
+        await Assertions.Expect(GetRow(title)).ToBeVisibleAsync();
+        await Assertions.Expect(GetRow(title)).ToHaveCountAsync(1);
+        var dataTestId = await GetRow(title).GetAttributeAsync("data-testid") ?? throw new InvalidDataException($"data-testid is undefined for {title}");
+        var row = Page.GetByTestId(dataTestId);
+        await row.GetByRole(AriaRole.Button, new() { Name = "Edit" }).ClickAsync();
+        await Assertions.Expect(row.GetByRole(AriaRole.Textbox)).ToBeVisibleAsync();
+        await row.GetByRole(AriaRole.Textbox).FillAsync(newTitle);
+        await row.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        await Assertions.Expect(row).ToContainTextAsync(newTitle);
     }
 
     public async Task CancelEditAsync(string title)
     {
-        await GetEditButton(title).ClickAsync();
-        await GetCancelButton(title).ClickAsync();
-        await Assertions.Expect(GetEditInput(title)).ToBeHiddenAsync();
+        var dataTestId = await GetRow(title).GetAttributeAsync("data-testid") ?? throw new InvalidDataException($"data-testid is undefined for {title}");
+        var row = Page.GetByTestId(dataTestId);;
+        await row.GetByRole(AriaRole.Button, new() { Name = "Edit" }).ClickAsync();
+        await Assertions.Expect(row.GetByRole(AriaRole.Textbox)).ToBeVisibleAsync();
+        await row.GetByRole(AriaRole.Button, new() { Name = "Cancel" }).ClickAsync();
+        await Assertions.Expect(row.GetByRole(AriaRole.Textbox)).ToBeHiddenAsync();
+    }
+
+    public async Task DeleteAsync(string title)
+    {
+        await GetDeleteButton(title).ClickAsync();
+        await Assertions.Expect(DeleteModal).ToBeVisibleAsync();
+        await ConfirmDeleteButton.ClickAsync();
+        await Assertions.Expect(DeleteModal).ToBeHiddenAsync();
+        await Assertions.Expect(GetRow(title)).ToBeHiddenAsync();
     }
 
     public async Task<bool> HasTodoAsync(string title)
     {
-        return await GetTodoRow(title).IsVisibleAsync();
+        return await GetRow(title).IsVisibleAsync();
     }
 }
