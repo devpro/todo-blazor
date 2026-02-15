@@ -21,11 +21,23 @@ docker run --rm -p 9001:8080 -e DatabaseSettings__ConnectionString=$MONGODB_CONN
 
 Open [localhost:9001](http://localhost:9001)
 
-Configuration:
+The environment variable `DatabaseSettings__ConnectionString` must relate to the MongoDB database -
+for example equals to `mongodb://localhost:27017` for a local container started with `docker run --name mongodb8 -d -p 27017:27017 mongo:8.2`.
 
-- MONGODB_CONNSTRING
-  
-  - `mongodb://localhost:27017` if local MongoDB without authentication (for example with `docker run --name mongodb8 -d -p 27017:27017 mongo:8.2`)
+## Backlog
+
+- [x] Auth with users in MongoDB
+- [x] Todo list page
+- [x] Dockerfile
+- [x] Docker compose
+- [x] Helm chart
+- [x] Integration tests (xUnit)
+- [x] Sonar
+- [x] CI/CD
+- [x] Badges in README
+- [x] Secret check (GitGuardian)
+- [x] Health check (with db check)
+- [x] End-to-end tests (Playwright)
 
 ## Operations
 

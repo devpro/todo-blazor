@@ -1,29 +1,5 @@
 # Contribution guide
 
-## Backlog
-
-- [x] Auth with users in MongoDB
-- [x] Todo list page
-- [x] Dockerfile
-- [x] Docker compose
-- [x] Helm chart
-- [x] Integration tests (xUnit)
-- [x] Sonar
-- [x] CI/CD
-- [x] Badges in README
-- [x] Secret check (GitGuardian)
-- [x] Health check (with db check)
-- [ ] End-to-end tests (Playwright)
-- [ ] Unit tests (.NET)
-- [ ] Code indentation review (in particular js/css files)
-
-## Limitations
-
-NuGet packages:
-
-- Open: xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
-- Resolved: Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9
-
 ## Run locally
 
 ### Individual components
@@ -48,7 +24,7 @@ NuGet packages:
 
       - Open [localhost:5147](http://localhost:5147)
 
-    - **Option 2**: Run in a container (assuming Docker is present)
+    - **Option 2**: Run in a container
 
       - Build the container
 
@@ -77,7 +53,7 @@ NuGet packages:
 
       - Open [localhost:9001](http://localhost:9001)
 
-    - **Option 3**: Debug in an IDE (Visual Studio 2022/2026 or Rider)
+    - **Option 3**: Debug in an IDE
 
 3. Clean-up
 
@@ -130,14 +106,29 @@ await page.GotoAsync("https://playwright.dev/dotnet");
 await page.ScreenshotAsync(new() { Path = "screenshot.png" });
 -->
 
-## Rider
+## IDE
 
-Remove duplication in the test view:
+### Rider
 
-> In File > Settings > Build, Execution, Deployment > Unit Testing > VSTest, uncheck 'Enable VSTest adapters support'
-> ([xunit/visualstudio.xunit/issues/436](https://github.com/xunit/visualstudio.xunit/issues/436#issuecomment-2687240662))
+Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-rider) 
 
-This is defined in `TodoBlazor.sln.DotSettings`.
+The file `TodoBlazor.sln.DotSettings` is versioned and contains the following fix:
+
+- Remove duplication in the test view:
+
+  - **File** > **Settings** > **Build, Execution, Deployment** > **Unit Testing** > **VSTest**: `Enable VSTest adapters support` must be unchecked
+    (see [xunit/visualstudio.xunit/issues/436](https://github.com/xunit/visualstudio.xunit/issues/436#issuecomment-2687240662))
+
+### Visual Studio 2022/2026
+
+Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-visual-studio)
+
+## Limitations
+
+NuGet packages:
+
+- xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
+- FIXED ~~Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9~~
 
 ## References
 
