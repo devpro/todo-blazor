@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using AwesomeAssertions;
+using Bogus;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
 using Microsoft.Playwright;
@@ -49,9 +50,10 @@ public class WalkthroughTest(BlazorAppFactory factory) : PageTest(), IClassFixtu
             var task1 = _faker.Company.CatchPhrase();
             await todoPage.AddItemAsync(task1);
             await todoPage.ToggleDoneAsync(task1);
-            await todoPage.EditAsync(task1, task1 + " oups");
-            await todoPage.CancelEditAsync(task1 + " oups");
-            await todoPage.DeleteAsync(task1 + " oups");
+            await todoPage.SaveEditAsync(task1, task1 + " bis");
+            await todoPage.CancelEditAsync(task1 + " bis");
+            (await todoPage.HasTodoAsync(task1 + " bis")).Should().BeTrue();
+            await todoPage.DeleteAsync(task1 + " bis");
 
             await homePage.ClickLogoutFromAuthorizedAsync();
         }
