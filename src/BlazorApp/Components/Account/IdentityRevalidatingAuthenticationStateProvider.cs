@@ -7,8 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Devpro.TodoList.BlazorApp.Components.Account
 {
-    // This is a server-side AuthenticationStateProvider that revalidates the security stamp for the connected user
-    // every 30 minutes an interactive circuit is connected.
+    // revalidates the security stamp for the connected user every 30 minutes an interactive circuit is connected
     internal sealed class IdentityRevalidatingAuthenticationStateProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
@@ -20,7 +19,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
         protected override async Task<bool> ValidateAuthenticationStateAsync(
             AuthenticationState authenticationState, CancellationToken cancellationToken)
         {
-            // Get the user manager from a new scope to ensure it fetches fresh data
+            // ensures the user manager fetches fresh data from a new scope
             await using var scope = scopeFactory.CreateAsyncScope();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             return await ValidateSecurityStampAsync(userManager, authenticationState.User);
@@ -33,16 +32,15 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
             {
                 return false;
             }
-            else if (!userManager.SupportsUserSecurityStamp)
+
+            if (!userManager.SupportsUserSecurityStamp)
             {
                 return true;
             }
-            else
-            {
-                var principalStamp = principal.FindFirstValue(options.Value.ClaimsIdentity.SecurityStampClaimType);
-                var userStamp = await userManager.GetSecurityStampAsync(user);
-                return principalStamp == userStamp;
-            }
+
+            var principalStamp = principal.FindFirstValue(options.Value.ClaimsIdentity.SecurityStampClaimType);
+            var userStamp = await userManager.GetSecurityStampAsync(user);
+            return principalStamp == userStamp;
         }
     }
 }

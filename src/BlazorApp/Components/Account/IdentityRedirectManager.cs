@@ -6,7 +6,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
 {
     public class IdentityRedirectManager(NavigationManager navigationManager)
     {
-        protected NavigationManager NavigationManager { get; private set; } = navigationManager;
+        protected NavigationManager NavigationManager { get; } = navigationManager;
 
         public const string StatusCookieName = "Identity.StatusMessage";
 
@@ -15,7 +15,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
             SameSite = SameSiteMode.Strict,
             HttpOnly = true,
             IsEssential = true,
-            MaxAge = TimeSpan.FromSeconds(5),
+            MaxAge = TimeSpan.FromSeconds(5)
         };
 
         public virtual void RedirectTo(string? uri)
