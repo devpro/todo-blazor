@@ -2,7 +2,7 @@
 
 public class BlazorAppFixture : IAsyncDisposable
 {
-    public BlazorAppFactory Factory { get; }
+    private BlazorAppFactory Factory { get; }
 
     public string ServerAddress => Factory.ServerAddress;
 

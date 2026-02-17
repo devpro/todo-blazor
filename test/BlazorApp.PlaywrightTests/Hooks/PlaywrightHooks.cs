@@ -29,7 +29,7 @@ public class PlaywrightHooks
     {
         var context = await s_browser!.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = new() { Width = 1920, Height = 1080 },
+            ViewportSize = new ViewportSize { Width = 1920, Height = 1080 },
             IgnoreHTTPSErrors = true
         });
 
