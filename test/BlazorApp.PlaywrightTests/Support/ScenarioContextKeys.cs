@@ -1,6 +1,6 @@
 ﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
 
-public class ScenarioContextKeys
+public static class ScenarioContextKeys
 {
     public const string BlazorServerAddress = "BlazorServerAddress";
     public const string Context = "Context";

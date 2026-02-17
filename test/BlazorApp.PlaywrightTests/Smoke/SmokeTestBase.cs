@@ -1,6 +1,6 @@
 ﻿using Bogus;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
 using Microsoft.Playwright;
 using Microsoft.Playwright.Xunit.v3;
 

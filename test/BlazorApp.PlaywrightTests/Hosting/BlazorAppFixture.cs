@@ -1,4 +1,4 @@
-﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
+﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 
 public class BlazorAppFixture : IAsyncDisposable
 {

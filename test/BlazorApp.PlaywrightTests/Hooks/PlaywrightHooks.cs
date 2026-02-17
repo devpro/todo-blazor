@@ -1,5 +1,5 @@
-﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
+﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
 using Microsoft.Playwright;
 using Reqnroll;
 

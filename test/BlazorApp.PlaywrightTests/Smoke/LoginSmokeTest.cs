@@ -1,4 +1,4 @@
-﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
+﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 
