@@ -35,8 +35,8 @@ public class TodoPage(IPage page) : PageBase(page)
     private ILocator GetCheckbox(string testId) => Page.GetByTestId(testId)
         .GetByRole(AriaRole.Checkbox);
 
-    private ILocator GetDeleteButton(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Button,
-        new LocatorGetByRoleOptions { Name = "Delete" });
+    private ILocator GetDeleteButton(string testId) => Page.GetByTestId(testId)
+        .GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Delete" });
 
     private ILocator DeleteModal => Page.GetByTestId("delete-confirmation-modal");
 

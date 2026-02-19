@@ -7,7 +7,7 @@ public abstract class PageBase(IPage page)
 {
     // base
 
-    protected IPage Page { get; private set; } = page;
+    protected IPage Page { get; } = page;
 
     protected abstract string WebPageTitle { get; }
 

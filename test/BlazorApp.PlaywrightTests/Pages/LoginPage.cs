@@ -1,5 +1,4 @@
-﻿using AwesomeAssertions;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 
@@ -15,7 +14,7 @@ public class LoginPage(IPage page) : PageBase(page)
 
     private ILocator PasswordInput => Page.GetByLabel("Password");
 
-    private ILocator LoginButton => Page.GetByRole(AriaRole.Button, new() { Name = "Log in" });
+    private ILocator LoginButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Log in" });
 
     private ILocator ErrorMessage => Page.Locator(".alert-danger");
 
@@ -30,14 +29,14 @@ public class LoginPage(IPage page) : PageBase(page)
     public async Task SubmitAndVerifyFailureAsync(string message)
     {
         await LoginButton.ClickAsync();
-        (await ErrorMessage.IsVisibleAsync()).Should().BeTrue();
-        (await ErrorMessage.TextContentAsync()).Should().Be(message);
+        await Assertions.Expect(ErrorMessage).ToBeVisibleAsync();
+        await Assertions.Expect(ErrorMessage).ToHaveTextAsync(message);
     }
 
     public async Task<HomePage> SubmitAndVerifySuccessAsync()
     {
         await LoginButton.ClickAsync();
-        (await ErrorMessage.IsVisibleAsync()).Should().BeFalse();
+        await Assertions.Expect(ErrorMessage).ToBeHiddenAsync();
         var homePage = new HomePage(Page);
         await homePage.WaitForReadyAsync();
         return homePage;

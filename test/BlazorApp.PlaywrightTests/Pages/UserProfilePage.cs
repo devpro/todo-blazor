@@ -38,9 +38,11 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     private ILocator PersonalDataMenuLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Personal data" });
 
-    private ILocator DeleteButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Delete" });
+    private ILocator PersonalDataHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Personal Data", Exact =  true });
 
-    // h3 Delete Personal Data
+    private ILocator DeleteLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Delete" });
+
+    private ILocator DeletePersonalDataHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Delete Personal Data" });
 
     private ILocator PasswordField => Page.GetByLabel("Password");
 
@@ -51,4 +53,21 @@ public class UserProfilePage(IPage page) : PageBase(page)
     // actions
 
     // TODO
+
+    public async Task OpenPersonalDataAsync()
+    {
+        await PersonalDataMenuLink.ClickAsync();
+        await Assertions.Expect(PersonalDataHeader).ToBeVisibleAsync();
+    }
+
+    public async Task<LoginPage> ClickAndConfirmDeletionAsync(string password)
+    {
+        await DeleteLink.ClickAsync();
+        await Assertions.Expect(DeletePersonalDataHeader).ToBeVisibleAsync();
+        await PasswordField.FillAsync(password);
+        await DeleteConfirmationButton.ClickAsync();
+        var loginPage = new LoginPage(Page);
+        await loginPage.WaitForReadyAsync();
+        return loginPage;
+    }
 }

@@ -45,4 +45,11 @@ public abstract class SmokeTestBase(BlazorAppFactory factory) : PageTest(), ICla
         await loginPage.EnterCredentialsAsync(username, password);
         return await loginPage.SubmitAndVerifySuccessAsync();
     }
+
+    protected async Task<LoginPage> DeleteUserAsync(PageBase page, string password)
+    {
+        var profilePage = await page.OpenUserProfileAsync();
+        await profilePage.OpenPersonalDataAsync();
+        return await profilePage.ClickAndConfirmDeletionAsync(password);
+    }
 }
