@@ -10,25 +10,17 @@ public class TodoSmokeTest(BlazorAppFactory factory) : SmokeTestBase(factory)
     {
         var userInfo = new { Email = _faker.Internet.Email(), Password = _faker.Internet.Password(8) + "aA9!" };
 
-        try
-        {
-            var homePage = await RegisterLoginUser(userInfo.Email, userInfo.Password);
+        var homePage = await RegisterLoginUserAsync(userInfo.Email, userInfo.Password);
 
-            var todoPage = await homePage.OpenTodoAsync();
-            var task1 = _faker.Company.CatchPhrase();
-            await todoPage.AddItemAsync(task1);
-            await todoPage.ToggleDoneAsync(task1);
-            await todoPage.SaveEditAsync(task1, task1 + " bis");
-            await todoPage.CancelEditAsync(task1 + " bis");
-            (await todoPage.HasTodoAsync(task1 + " bis")).Should().BeTrue();
-            await todoPage.DeleteAsync(task1 + " bis");
+        var todoPage = await homePage.OpenTodoAsync();
+        var task1 = _faker.Company.CatchPhrase();
+        await todoPage.AddItemAsync(task1);
+        await todoPage.ToggleDoneAsync(task1);
+        await todoPage.SaveEditAsync(task1, task1 + " bis");
+        await todoPage.CancelEditAsync(task1 + " bis");
+        (await todoPage.HasTodoAsync(task1 + " bis")).Should().BeTrue();
+        await todoPage.DeleteAsync(task1 + " bis");
 
-            await homePage.ClickLogoutFromAuthorizedAsync();
-        }
-        catch
-        {
-            await TakeScreenshot();
-            throw;
-        }
+        await homePage.ClickLogoutFromAuthorizedAsync();
     }
 }

@@ -18,14 +18,7 @@ public abstract class SmokeTestBase(BlazorAppFactory factory) : PageTest(), ICla
         Page.SetDefaultNavigationTimeout(20_000);
     }
 
-    protected async Task<HomePage> OpenHomePage()
-    {
-        var homePage = new HomePage(Page);
-        await homePage.NavigateToAsync(factory.ServerAddress);
-        return homePage;
-    }
-
-    protected async Task TakeScreenshot()
+    public async Task TakeScreenshotAsync()
     {
         await Page.ScreenshotAsync(new PageScreenshotOptions
         {
@@ -34,9 +27,16 @@ public abstract class SmokeTestBase(BlazorAppFactory factory) : PageTest(), ICla
         });
     }
 
-    protected async Task<HomePage> RegisterLoginUser(string username, string password)
+    protected async Task<HomePage> OpenHomePageAsync()
     {
-        var homePage = await OpenHomePage();
+        var homePage = new HomePage(Page);
+        await homePage.NavigateToAsync(factory.ServerAddress);
+        return homePage;
+    }
+
+    protected async Task<HomePage> RegisterLoginUserAsync(string username, string password)
+    {
+        var homePage = await OpenHomePageAsync();
         var registerPage = await homePage.OpenRegisterAsync();
         await registerPage.EnterCredentialsAsync(username, password, password);
         var registerConfirmPage = await registerPage.SubmitAndVerifySuccessAsync();

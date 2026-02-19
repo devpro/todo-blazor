@@ -17,25 +17,32 @@ public class TodoPage(IPage page) : PageBase(page)
 
     private ILocator LoadingSpinner => Page.GetByTestId("loading-message");
 
-    private ILocator GetRowWithText(string title) => Page.Locator("ul.list-group > li").Filter(new() { HasText = title });
+    private ILocator GetRowWithText(string title) => Page.Locator("ul.list-group > li")
+        .Filter(new LocatorFilterOptions { HasText = title });
 
-    private ILocator GetEditButton(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Button, new() { Name = "Edit" });
+    private ILocator GetEditButton(string testId) => Page.GetByTestId(testId)
+        .GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Edit" });
 
-    private ILocator GetTextbox(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Textbox);
+    private ILocator GetTextbox(string testId) => Page.GetByTestId(testId)
+        .GetByRole(AriaRole.Textbox);
 
-    private ILocator GetSaveButton(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Button, new() { Name = "Save" });
+    private ILocator GetSaveButton(string testId) => Page.GetByTestId(testId)
+        .GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Save" });
 
-    private ILocator GetCancelButton(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Button, new() { Name = "Cancel" });
+    private ILocator GetCancelButton(string testId) => Page.GetByTestId(testId)
+        .GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Cancel" });
 
-    private ILocator GetCheckbox(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Checkbox);
+    private ILocator GetCheckbox(string testId) => Page.GetByTestId(testId)
+        .GetByRole(AriaRole.Checkbox);
 
-    private ILocator GetDeleteButton(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Button, new() { Name = "Delete" });
+    private ILocator GetDeleteButton(string testId) => Page.GetByTestId(testId).GetByRole(AriaRole.Button,
+        new LocatorGetByRoleOptions { Name = "Delete" });
 
     private ILocator DeleteModal => Page.GetByTestId("delete-confirmation-modal");
 
-    private ILocator ConfirmDeleteButton => DeleteModal.GetByRole(AriaRole.Button, new() { Name = "Delete" });
+    private ILocator ConfirmDeleteButton => DeleteModal.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Delete" });
 
-    public ILocator CancelDeleteButton => DeleteModal.GetByRole(AriaRole.Button, new() { Name = "Cancel" });
+    public ILocator CancelDeleteButton => DeleteModal.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Cancel" });
 
     // actions
 
