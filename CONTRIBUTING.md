@@ -98,19 +98,11 @@ Generate tests with:
 pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 codegen https://localhost:7099/
 ```
 
-<!--
-using var playwright = await Playwright.CreateAsync();
-await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = false });
-var page = await browser.NewPageAsync();
-await page.GotoAsync("https://playwright.dev/dotnet");
-await page.ScreenshotAsync(new() { Path = "screenshot.png" });
--->
-
 ## IDE
 
 ### Rider
 
-Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-rider) 
+Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-rider)
 
 The file `TodoBlazor.sln.DotSettings` is versioned and contains the following fix:
 

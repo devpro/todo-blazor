@@ -14,7 +14,7 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     private ILocator ProfileSectionLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Profile" });
 
-    private ILocator ProfileSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Profile", Exact =  true });
+    private ILocator ProfileSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Profile", Exact = true });
 
     private ILocator UsernameField => Page.GetByLabel("Username");
 
@@ -46,7 +46,7 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     private ILocator PersonalDataSectionLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Personal data" });
 
-    private ILocator PersonalDataSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Personal Data", Exact =  true });
+    private ILocator PersonalDataSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Personal Data", Exact = true });
 
     private ILocator DeleteLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Delete" });
 
