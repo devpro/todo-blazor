@@ -84,15 +84,15 @@
 
     private async Task OnValidSubmitAsync()
     {
-        if (Input.NewEmail is null || Input.NewEmail == _email)
-        {
-            _message = "Your email is unchanged.";
-            return;
-        }
-
         if (_user is null)
         {
             RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
+            return;
+        }
+
+        if (Input.NewEmail is null || Input.NewEmail == _email)
+        {
+            _message = "Info: Your email is unchanged.";
             return;
         }
 

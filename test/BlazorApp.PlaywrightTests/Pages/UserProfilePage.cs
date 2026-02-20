@@ -10,7 +10,11 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     // locators
 
-    private ILocator ProfileMenuLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Profile" });
+    private ILocator AlertMessage => Page.GetByRole(AriaRole.Alert);
+
+    private ILocator ProfileSectionLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Profile" });
+
+    private ILocator ProfileSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Profile", Exact =  true });
 
     private ILocator UsernameField => Page.GetByLabel("Username");
 
@@ -18,15 +22,19 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     private ILocator SaveButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Save" });
 
-    private ILocator EmailMenuLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Email" });
+    private ILocator EmailSectionLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Email" });
 
-    private ILocator EmailField => Page.GetByLabel("Email");
+    private ILocator EmailSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Manage email" });
+
+    private ILocator EmailField => Page.GetByRole(AriaRole.Textbox, new PageGetByRoleOptions { Name = "Email", Exact = true });
 
     private ILocator NewEmailField => Page.GetByLabel("New email");
 
     private ILocator ChangeEmailButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Change email" });
 
-    private ILocator PasswordMenuLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Password" });
+    private ILocator PasswordSectionLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Password" });
+
+    private ILocator PasswordSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Change password" });
 
     private ILocator OldPasswordField => Page.GetByLabel("Old password");
 
@@ -36,9 +44,9 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     private ILocator UpdatePasswordButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Update password" });
 
-    private ILocator PersonalDataMenuLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Personal data" });
+    private ILocator PersonalDataSectionLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Personal data" });
 
-    private ILocator PersonalDataHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Personal Data", Exact =  true });
+    private ILocator PersonalDataSectionHeader => Page.GetByRole(AriaRole.Heading, new PageGetByRoleOptions { Name = "Personal Data", Exact =  true });
 
     private ILocator DeleteLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Delete" });
 
@@ -52,12 +60,57 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     // actions
 
-    // TODO
-
-    public async Task OpenPersonalDataAsync()
+    public async Task OpenProfileSectionAsync()
     {
-        await PersonalDataMenuLink.ClickAsync();
-        await Assertions.Expect(PersonalDataHeader).ToBeVisibleAsync();
+        await ProfileSectionLink.ClickAsync();
+        await Assertions.Expect(ProfileSectionHeader).ToBeVisibleAsync();
+    }
+
+    public async Task UpdateProfileAsync(string username, string phoneNumber)
+    {
+        await Assertions.Expect(UsernameField).ToHaveValueAsync(username);
+        await Assertions.Expect(PhoneNumberField).ToBeEnabledAsync();
+        await PhoneNumberField.FillAsync(phoneNumber);
+        await SaveButton.ClickAsync();
+        await Assertions.Expect(AlertMessage).ToBeVisibleAsync();
+        await Assertions.Expect(AlertMessage).ToContainTextAsync("Your profile has been updated");
+    }
+
+    public async Task OpenEmailSectionAsync()
+    {
+        await EmailSectionLink.ClickAsync();
+        await Assertions.Expect(EmailSectionHeader).ToBeVisibleAsync();
+    }
+
+    public async Task UpdateEmailAsync(string oldEmail, string newEmail)
+    {
+        await Assertions.Expect(EmailField).ToHaveValueAsync(oldEmail);
+        await NewEmailField.FillAsync(newEmail);
+        await ChangeEmailButton.ClickAsync();
+        await Assertions.Expect(AlertMessage).ToBeVisibleAsync();
+        await Assertions.Expect(AlertMessage).ToContainTextAsync("Confirmation link to change email sent. Please check your email.");
+    }
+
+    public async Task OpenPasswordSectionAsync()
+    {
+        await PasswordSectionLink.ClickAsync();
+        await Assertions.Expect(PasswordSectionHeader).ToBeVisibleAsync();
+    }
+
+    public async Task UpdatePasswordAsync(string oldPassword, string newPassword)
+    {
+        await OldPasswordField.FillAsync(oldPassword);
+        await NewPasswordField.FillAsync(newPassword);
+        await ConfirmPasswordField.FillAsync(newPassword);
+        await UpdatePasswordButton.ClickAsync();
+        await Assertions.Expect(AlertMessage).ToBeVisibleAsync();
+        await Assertions.Expect(AlertMessage).ToContainTextAsync("Your password has been changed");
+    }
+
+    public async Task OpenPersonalDataSectionAsync()
+    {
+        await PersonalDataSectionLink.ClickAsync();
+        await Assertions.Expect(PersonalDataSectionHeader).ToBeVisibleAsync();
     }
 
     public async Task<LoginPage> ClickAndConfirmDeletionAsync(string password)

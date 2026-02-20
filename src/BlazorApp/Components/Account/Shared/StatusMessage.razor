@@ -1,8 +1,8 @@
 ﻿@if (!string.IsNullOrEmpty(DisplayMessage))
 {
-    var statusMessageClass = DisplayMessage.StartsWith("Error") ? "danger" : "success";
+    var statusMessageClass = DisplayMessage.StartsWith("Error") ? "danger" : DisplayMessage.StartsWith("Info") ? "info" : "success";
     <div class="alert alert-@statusMessageClass" role="alert">
-        @DisplayMessage
+        @DisplayMessage.Replace("Info: ", "")
     </div>
 }
 

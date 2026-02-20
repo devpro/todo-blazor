@@ -1,6 +1,7 @@
 ﻿@page "/Account/Manage"
 
 @using System.ComponentModel.DataAnnotations
+@using Devpro.TodoList.BlazorApp.Components.Validation
 @using Devpro.TodoList.BlazorApp.Identity
 @using Microsoft.AspNetCore.Identity
 
@@ -68,7 +69,10 @@
             return;
         }
 
-        if (Input.PhoneNumber != _phoneNumber)
+        var isProfileUpdated = false;
+
+        if (!string.IsNullOrWhiteSpace(Input.PhoneNumber)
+            && Input.PhoneNumber != _phoneNumber)
         {
             var setPhoneResult = await UserManager.SetPhoneNumberAsync(_user, Input.PhoneNumber);
             if (!setPhoneResult.Succeeded)
@@ -76,15 +80,17 @@
                 RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to set phone number.", HttpContext);
                 return;
             }
+
+            isProfileUpdated = true;
         }
 
         await SignInManager.RefreshSignInAsync(_user);
-        RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
+        RedirectManager.RedirectToCurrentPageWithStatus(isProfileUpdated ? "Your profile has been updated" : "Info: No update needed", HttpContext);
     }
 
     private sealed class InputModel
     {
-        [Phone]
+        [OptionalPhone]
         [Display(Name = "Phone number")]
         public string? PhoneNumber { get; set; }
     }
