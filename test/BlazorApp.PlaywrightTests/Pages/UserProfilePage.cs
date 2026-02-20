@@ -88,7 +88,9 @@ public class UserProfilePage(IPage page) : PageBase(page)
         await NewEmailField.FillAsync(newEmail);
         await ChangeEmailButton.ClickAsync();
         await Assertions.Expect(AlertMessage).ToBeVisibleAsync();
-        await Assertions.Expect(AlertMessage).ToContainTextAsync("Confirmation link to change email sent. Please check your email.");
+        await Assertions.Expect(AlertMessage).ToContainTextAsync(oldEmail != newEmail
+            ? "Confirmation link to change email sent. Please check your email."
+            : "Your email is unchanged.");
     }
 
     public async Task OpenPasswordSectionAsync()

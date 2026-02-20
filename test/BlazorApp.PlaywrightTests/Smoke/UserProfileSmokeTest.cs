@@ -39,6 +39,7 @@ public class UserProfileSmokeTest(BlazorAppFactory factory) : SmokeTestBase(fact
 
         var profilePage = await homePage.OpenUserProfileAsync();
         await profilePage.OpenEmailSectionAsync();
+        await profilePage.UpdateEmailAsync(userInfo.Email, userInfo.Email);
         await profilePage.UpdateEmailAsync(userInfo.Email, userInfo.Email + "o");
 
         await DeleteUserAsync(profilePage, userInfo.Password);

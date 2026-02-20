@@ -122,6 +122,25 @@ NuGet packages:
 - xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
 - FIXED ~~Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9~~
 
+## Operations
+
+### Checking image signature
+
+<!--All images pushed to DockerHub are signed using Cosign (keyless mode via GitHub OIDC).-->
+
+```bash
+# predicts signature location
+docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
+  triangulate docker.io/devprofr/todoblazor:1.0.21711317943
+
+# verifies signature (recommended)
+docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
+  verify \
+    --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
+    --certificate-identity-regexp="https://github.com/devpro/todo-blazor/.github/workflows/pkg.yml@.*" \
+    docker.io/devprofr/todoblazor:1.0.21711317943
+```
+
 ## References
 
 .NET documentation:
