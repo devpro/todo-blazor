@@ -18,6 +18,8 @@ public class LoginPage(IPage page) : PageBase(page)
 
     private ILocator ErrorMessage => Page.Locator(".alert-danger");
 
+    private ILocator ResendEmailConfirmationLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Resend email confirmation" });
+
     // actions
 
     public async Task EnterCredentialsAsync(string username, string password)
@@ -40,5 +42,13 @@ public class LoginPage(IPage page) : PageBase(page)
         var homePage = new HomePage(Page);
         await homePage.WaitForReadyAsync();
         return homePage;
+    }
+
+    public async Task<ResendEmailConfirmationPage> OpenResendEmailConfirmationPage()
+    {
+        await ResendEmailConfirmationLink.ClickAsync();
+        var resendEmailConfirmationPage = new ResendEmailConfirmationPage(Page);
+        await resendEmailConfirmationPage.WaitForReadyAsync();
+        return resendEmailConfirmationPage;
     }
 }

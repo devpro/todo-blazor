@@ -34,6 +34,16 @@ public abstract class SmokeTestBase(BlazorAppFactory factory) : PageTest(), ICla
         return homePage;
     }
 
+    protected async Task<HomePage> RegisterUserAsync(string username, string password)
+    {
+        var homePage = await OpenHomePageAsync();
+        var registerPage = await homePage.OpenRegisterAsync();
+        await registerPage.EnterCredentialsAsync(username, password, password);
+        var registerConfirmPage = await registerPage.SubmitAndVerifySuccessAsync();
+        await registerConfirmPage.ClickConfirmationLinkAsync();
+        return await registerConfirmPage.OpenHomeAsync();
+    }
+
     protected async Task<HomePage> RegisterLoginUserAsync(string username, string password)
     {
         var homePage = await OpenHomePageAsync();

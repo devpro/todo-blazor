@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using Moq;
 
-namespace BlazorApp.UnitTests.Components.Account;
+namespace Devpro.TodoList.BlazorApp.UnitTests.Components.Account;
 
 public class IdentityRevalidatingAuthenticationStateProviderUnitTest
 {

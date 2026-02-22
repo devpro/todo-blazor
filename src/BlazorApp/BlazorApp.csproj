@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="BlazorApp.UnitTests" />
+    <InternalsVisibleTo Include="Devpro.TodoList.BlazorApp.UnitTests" />
   </ItemGroup>
 
 </Project>

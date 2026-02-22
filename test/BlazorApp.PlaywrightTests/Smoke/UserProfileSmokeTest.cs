@@ -75,4 +75,31 @@ public class UserProfileSmokeTest(BlazorAppFactory factory) : SmokeTestBase(fact
         await profilePage.OpenPersonalDataSectionAsync();
         await profilePage.ClickAndConfirmDeletionAsync(userInfo.Password);
     }
+
+    [Fact]
+    [ScreenshotOnFailure]
+    public async Task ResendEmailConfirmation_Fails()
+    {
+        var userInfo = new { Email = _faker.Internet.Email(), Password = _faker.Internet.Password(8) + "aA9!" };
+
+        var homePage = await RegisterUserAsync(userInfo.Email, userInfo.Password);
+
+        var loginPage = await homePage.OpenLoginAsync();
+        var resendEmailConfirmationPage = await loginPage.OpenResendEmailConfirmationPage();
+        await resendEmailConfirmationPage.SubmitAsync("The Email field is required.");
+    }
+
+    [Fact]
+    [ScreenshotOnFailure]
+    public async Task ResendEmailConfirmation_Succeeds()
+    {
+        var userInfo = new { Email = _faker.Internet.Email(), Password = _faker.Internet.Password(8) + "aA9!" };
+
+        var homePage = await RegisterUserAsync(userInfo.Email, userInfo.Password);
+
+        var loginPage = await homePage.OpenLoginAsync();
+        var resendEmailConfirmationPage = await loginPage.OpenResendEmailConfirmationPage();
+        await resendEmailConfirmationPage.EnterEmailAsync(userInfo.Email);
+        await resendEmailConfirmationPage.SubmitAsync("Verification email sent. Please check your email.");
+    }
 }
