@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace Devpro.TodoList.BlazorApp.Components.Account
 {
     // revalidates the security stamp for the connected user every 30 minutes an interactive circuit is connected
-    internal sealed class IdentityRevalidatingAuthenticationStateProvider(
+    internal class IdentityRevalidatingAuthenticationStateProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
             IOptions<IdentityOptions> options)
@@ -25,7 +25,7 @@ namespace Devpro.TodoList.BlazorApp.Components.Account
             return await ValidateSecurityStampAsync(userManager, authenticationState.User);
         }
 
-        private async Task<bool> ValidateSecurityStampAsync(UserManager<ApplicationUser> userManager, ClaimsPrincipal principal)
+        protected virtual async Task<bool> ValidateSecurityStampAsync(UserManager<ApplicationUser> userManager, ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal);
             if (user is null)
