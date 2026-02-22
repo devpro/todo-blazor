@@ -85,6 +85,7 @@ public class UserProfilePage(IPage page) : PageBase(page)
     public async Task UpdateEmailAsync(string oldEmail, string newEmail)
     {
         await Assertions.Expect(EmailField).ToHaveValueAsync(oldEmail);
+        await Assertions.Expect(NewEmailField).ToBeEnabledAsync();
         await NewEmailField.FillAsync(newEmail);
         await ChangeEmailButton.ClickAsync();
         await Assertions.Expect(AlertMessage).ToBeVisibleAsync();
