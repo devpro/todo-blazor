@@ -48,7 +48,7 @@ jobs:
         Application__IsHttpsRedirectionEnabled="false"
       mongodb-enabled: true
       fossa-enabled: true
-      fossa-test: true
+      fossa-test: false
       sonar-enabled: true
       sonar-organization: ${{ vars.SONAR_ORG }}
       sonar-project-key: ${{ vars.SONAR_PROJECT_KEY }}
