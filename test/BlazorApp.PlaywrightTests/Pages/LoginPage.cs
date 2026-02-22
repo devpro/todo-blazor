@@ -20,6 +20,8 @@ public class LoginPage(IPage page) : PageBase(page)
 
     private ILocator ResendEmailConfirmationLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Resend email confirmation" });
 
+    private ILocator ForgotPasswordLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Forgot your password?" });
+
     // actions
 
     public async Task EnterCredentialsAsync(string username, string password)
@@ -50,5 +52,13 @@ public class LoginPage(IPage page) : PageBase(page)
         var resendEmailConfirmationPage = new ResendEmailConfirmationPage(Page);
         await resendEmailConfirmationPage.WaitForReadyAsync();
         return resendEmailConfirmationPage;
+    }
+
+    public async Task<ForgotPasswordPage> OpenForgotPasswordPage()
+    {
+        await ForgotPasswordLink.ClickAsync();
+        var forgotPasswordPage = new ForgotPasswordPage(Page);
+        await forgotPasswordPage.WaitForReadyAsync();
+        return forgotPasswordPage;
     }
 }

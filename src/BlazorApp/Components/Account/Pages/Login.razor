@@ -96,12 +96,7 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-
-            var target = string.IsNullOrWhiteSpace(ReturnUrl)
-                ? NavigationManager.BaseUri
-                : ReturnUrl;
-
-            RedirectManager.RedirectTo(target);
+            RedirectManager.RedirectTo(ReturnUrl);
         }
         // else if (result.RequiresTwoFactor) { ... } // not managed
         else if (result.IsLockedOut)

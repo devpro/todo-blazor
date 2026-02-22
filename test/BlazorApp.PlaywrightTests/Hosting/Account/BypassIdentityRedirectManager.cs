@@ -14,6 +14,11 @@ public class BypassIdentityRedirectManager(NavigationManager navigationManager, 
         var context = httpContextAccessor.HttpContext;
         if (context != null)
         {
+            // for tests only
+            if (!uri.StartsWith("http"))
+            {
+                uri = NavigationManager.BaseUri + uri;
+            }
             context.Response.Redirect(uri, permanent: false);
         }
         else

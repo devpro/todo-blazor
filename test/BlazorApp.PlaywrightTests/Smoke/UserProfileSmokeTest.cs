@@ -102,4 +102,32 @@ public class UserProfileSmokeTest(BlazorAppFactory factory) : SmokeTestBase(fact
         await resendEmailConfirmationPage.EnterEmailAsync(userInfo.Email);
         await resendEmailConfirmationPage.SubmitAsync("Verification email sent. Please check your email.");
     }
+
+    [Fact]
+    [ScreenshotOnFailure]
+    public async Task ForgotPassword_Fails()
+    {
+        var userInfo = new { Email = _faker.Internet.Email(), Password = _faker.Internet.Password(8) + "aA9!" };
+
+        var homePage = await RegisterUserAsync(userInfo.Email, userInfo.Password);
+
+        var loginPage = await homePage.OpenLoginAsync();
+        var forgotPasswordPage = await loginPage.OpenForgotPasswordPage();
+        await forgotPasswordPage.SubmitErrorAsync("The Email field is required.");
+    }
+
+    [Fact]
+    [ScreenshotOnFailure]
+    public async Task ForgotPassword_Succeeds()
+    {
+        var userInfo = new { Email = _faker.Internet.Email(), Password = _faker.Internet.Password(8) + "aA9!" };
+
+        var homePage = await RegisterUserAsync(userInfo.Email, userInfo.Password);
+
+        var loginPage = await homePage.OpenLoginAsync();
+        var forgotPasswordPage = await loginPage.OpenForgotPasswordPage();
+        await forgotPasswordPage.EnterEmailAsync(userInfo.Email);
+        var forgotPasswordConfirmationPage = await forgotPasswordPage.SubmitSuccessAsync();
+        await forgotPasswordConfirmationPage.CheckStatusAsync("Please check your email to reset your password.");
+    }
 }
