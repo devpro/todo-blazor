@@ -1,4 +1,5 @@
 ﻿name: CI
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 # description: Continuous Integration pipeline
 
 on:
@@ -32,13 +33,13 @@ jobs:
 
   content-validate:
     name: Markup
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@9da34077939eeaba4358d3b09344cd77fdd7b1c5
 
   code-quality:
     name: Code
     needs: git-check
     if: needs.git-check.outputs.app_changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.run-code-quality)
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-dotnet-quality.yml@9da34077939eeaba4358d3b09344cd77fdd7b1c5
     with:
       custom-commands: |
         dotnet build --no-restore --configuration Debug test/BlazorApp.PlaywrightTests
@@ -47,6 +48,7 @@ jobs:
         Application__IsHttpsRedirectionEnabled="false"
       mongodb-enabled: true
       fossa-enabled: true
+      fossa-test: false
       sonar-enabled: true
       sonar-organization: ${{ vars.SONAR_ORG }}
       sonar-project-key: ${{ vars.SONAR_PROJECT_KEY }}
@@ -62,7 +64,7 @@ jobs:
     name: Image
     needs: git-check
     if: needs.git-check.outputs.app_changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.run-image-scan)
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@af83b76db469841ad5d7a1c102d41d9e3bc147ea
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-container-scan.yml@9da34077939eeaba4358d3b09344cd77fdd7b1c5
     with:
       image-definition: "src/BlazorApp/Dockerfile"
       image-name: ${{ vars.CONTAINER_IMAGE_NAME }}

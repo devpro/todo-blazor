@@ -58,3 +58,104 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+/* ──────────────────────────────────────────────
+   DARK MODE – stronger overrides for component CSS
+   ────────────────────────────────────────────── */
+
+[data-bs-theme="dark"] {
+    --bs-body-bg: #0d1117;
+    --bs-body-color: #c9d1d9;
+    --bs-link-color: #58a6ff;
+    --bs-link-hover-color: #79c0ff;
+
+    .top-row {
+        background-color: #161b22 !important;
+        border-bottom: 1px solid #30363d !important;
+        border-top: none !important;
+        box-shadow: none !important;
+    }
+
+    .sidebar {
+        background: #0d1117 none !important;
+        border-right: 1px solid #30363d !important;
+        box-shadow: none !important;
+    }
+
+    .nav-item ::deep .nav-link {
+        color: #c9d1d9 !important;
+        background: none !important;
+    }
+
+    .nav-item ::deep .nav-link:hover {
+        background-color: rgba(255,255,255,0.08) !important;
+        color: #ffffff !important;
+    }
+
+    .nav-item ::deep a.active {
+        background-color: rgba(88,166,255,0.22) !important;
+        color: #ffffff !important;
+    }
+
+    .navbar-toggler {
+        background-color: rgba(255,255,255,0.08) !important;
+        border-color: rgba(255,255,255,0.25) !important;
+        color: white !important;
+    }
+
+    .navbar-toggler:focus,
+    .navbar-toggler:active {
+        box-shadow: 0 0 0 0.25rem rgba(88,166,255,0.4) !important;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        background-size: 1.6rem !important;
+    }
+
+    .navbar-toggler:checked {
+        background-color: rgba(255,255,255,0.18) !important;
+    }
+
+    .nav-scrollable,
+    .navbar-collapse.show {
+        background-color: #0d1117 !important;
+        color: #c9d1d9 !important;
+    }
+
+    .card, .list-group-item {
+        background-color: #161b22 !important;
+        border-color: #30363d !important;
+        color: #c9d1d9 !important;
+    }
+
+    .form-control {
+        background-color: #0d1117 !important;
+        color: #c9d1d9 !important;
+        border-color: #30363d !important;
+    }
+
+    .form-control:focus {
+        border-color: #388bfd !important;
+        box-shadow: 0 0 0 0.25rem rgba(56,139,253,.25) !important;
+    }
+}
+
+[data-bs-theme="dark"] .top-row a,
+[data-bs-theme="dark"] .top-row .btn-link {
+    color: #c9d1d9 !important;
+}
+
+[data-bs-theme="dark"] .top-row a:hover {
+    color: white !important;
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    [data-bs-theme="dark"] .top-row {
+        background-color: #161b22 !important;
+    }
+    [data-bs-theme="dark"] .navbar-collapse {
+        border-top: 1px solid #30363d !important;
+    }
+}

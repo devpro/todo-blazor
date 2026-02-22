@@ -7,7 +7,7 @@ public abstract class PageBase(IPage page)
 {
     // base
 
-    protected IPage Page { get; private set; } = page;
+    protected IPage Page { get; } = page;
 
     protected abstract string WebPageTitle { get; }
 
@@ -15,13 +15,17 @@ public abstract class PageBase(IPage page)
 
     private ILocator PageHeader => Page.Locator("h1");
 
-    private ILocator LoginLink => Page.GetByRole(AriaRole.Link, new() { Name = "Login" });
+    private ILocator HomeLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Home" });
 
-    private ILocator RegisterLink => Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true });
+    private ILocator TodoLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Todo" });
 
-    private ILocator LogoutLink => Page.GetByRole(AriaRole.Button, new() { Name = "Logout" });
+    private ILocator LoginLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Login" });
 
-    private ILocator TodoLink => Page.GetByRole(AriaRole.Link, new() { Name = "Todo" });
+    private ILocator RegisterLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Register", Exact = true });
+
+    private ILocator UserProfileLink => Page.GetByTestId("user-profile-link");
+
+    private ILocator LogoutLink => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Logout" });
 
     // assertions
 
@@ -43,6 +47,14 @@ public abstract class PageBase(IPage page)
 
     // actions
 
+    public async Task<HomePage> OpenHomeAsync()
+    {
+        await HomeLink.ClickAsync();
+        var homePage = new HomePage(Page);
+        await homePage.WaitForReadyAsync();
+        return homePage;
+    }
+
     public async Task<LoginPage> OpenLoginAsync()
     {
         await LoginLink.ClickAsync();
@@ -57,6 +69,14 @@ public abstract class PageBase(IPage page)
         var registerPage = new RegisterPage(Page);
         await registerPage.WaitForReadyAsync();
         return registerPage;
+    }
+
+    public async Task<UserProfilePage> OpenUserProfileAsync()
+    {
+        await UserProfileLink.ClickAsync();
+        var userProfilePage = new UserProfilePage(Page);
+        await userProfilePage.WaitForReadyAsync();
+        return userProfilePage;
     }
 
     public async Task<HomePage> ClickLogoutAsync()

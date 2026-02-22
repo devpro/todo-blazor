@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM registry.suse.com/bci/dotnet-aspnet:10.0 AS base
-USER app
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -9,7 +9,8 @@ EXPOSE 8081
 FROM registry.suse.com/bci/dotnet-sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY . .
+COPY ./Directory.*.props .
+COPY ./src ./src
 RUN dotnet restore "src/BlazorApp/BlazorApp.csproj"
 RUN dotnet build "src/BlazorApp/BlazorApp.csproj" --no-restore -c "$BUILD_CONFIGURATION"
 
@@ -27,4 +28,5 @@ RUN --mount=type=secret,id=additional_file_name,env=ADDITIONAL_FILE_NAME \
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER $APP_UID
 ENTRYPOINT ["dotnet", "Devpro.TodoList.BlazorApp.dll"]

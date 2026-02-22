@@ -1,11 +1,14 @@
-﻿Feature: User Walkthrough (Registration + Login)
+﻿Feature: User authentication
 
-  Scenario: Register new user, login, verify home page, then logout
+  Scenario: Login failure on unknown credentials
     Given I navigate to the home page
     And the home page shows "Hello, world!"
     When I open the login page
     And I enter invalid credentials
     Then I see login error "Error: Invalid login attempt."
+
+  Scenario: Registration, login, logout
+    Given I navigate to the home page
     When I open the register page
     And I register with valid credentials
     Then I see register confirmation page
