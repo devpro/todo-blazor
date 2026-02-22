@@ -56,13 +56,11 @@ public class UserProfilePage(IPage page) : PageBase(page)
 
     private ILocator DeleteConfirmationButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Delete data and close my account" });
 
-    // Manage your account
-
     // actions
 
-    public async Task OpenProfileSectionAsync()
+    public override async Task WaitForReadyAsync()
     {
-        await ProfileSectionLink.ClickAsync();
+        await base.WaitForReadyAsync();
         await Assertions.Expect(ProfileSectionHeader).ToBeVisibleAsync();
     }
 
@@ -70,6 +68,7 @@ public class UserProfilePage(IPage page) : PageBase(page)
     {
         await Assertions.Expect(UsernameField).ToHaveValueAsync(username);
         await Assertions.Expect(PhoneNumberField).ToBeEnabledAsync();
+        await PhoneNumberField.ClickAsync();
         await PhoneNumberField.FillAsync(phoneNumber);
         await SaveButton.ClickAsync();
         await Assertions.Expect(AlertMessage).ToBeVisibleAsync();

@@ -1,4 +1,5 @@
 ﻿name: CI
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 # description: Continuous Integration pipeline
 
 on:
