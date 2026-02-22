@@ -19,4 +19,8 @@
     <PackageReference Include="MongoDB.EntityFrameworkCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Devpro.TodoList.BlazorApp.UnitTests" />
+  </ItemGroup>
+
 </Project>

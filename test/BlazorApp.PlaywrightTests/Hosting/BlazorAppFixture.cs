@@ -1,8 +1,8 @@
-﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Testing;
+﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 
 public class BlazorAppFixture : IAsyncDisposable
 {
-    public BlazorAppFactory Factory { get; }
+    private BlazorAppFactory Factory { get; }
 
     public string ServerAddress => Factory.ServerAddress;
 

@@ -10,13 +10,13 @@ public class RegisterPage(IPage page) : PageBase(page)
 
     // locators
 
-    private ILocator EmailInput => Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" });
+    private ILocator EmailInput => Page.GetByRole(AriaRole.Textbox, new PageGetByRoleOptions { Name = "Email" });
 
-    private ILocator PasswordInput => Page.GetByRole(AriaRole.Textbox, new() { Name = "Password", Exact = true });
+    private ILocator PasswordInput => Page.GetByRole(AriaRole.Textbox, new PageGetByRoleOptions { Name = "Password", Exact = true });
 
-    private ILocator PasswordConfirmationInput => Page.GetByRole(AriaRole.Textbox, new() { Name = "Confirm Password" });
+    private ILocator PasswordConfirmationInput => Page.GetByRole(AriaRole.Textbox, new PageGetByRoleOptions { Name = "Confirm Password" });
 
-    private ILocator RegisterButton => Page.GetByRole(AriaRole.Button, new() { Name = "Register" });
+    private ILocator RegisterButton => Page.GetByRole(AriaRole.Button, new PageGetByRoleOptions { Name = "Register" });
 
     // actions
 

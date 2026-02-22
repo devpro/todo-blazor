@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 
-namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Testing.Account;
+namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting.Account;
 
 public class BypassIdentityRedirectManager(NavigationManager navigationManager, IHttpContextAccessor httpContextAccessor)
     : IdentityRedirectManager(navigationManager)
@@ -14,6 +14,11 @@ public class BypassIdentityRedirectManager(NavigationManager navigationManager, 
         var context = httpContextAccessor.HttpContext;
         if (context != null)
         {
+            // for tests only
+            if (!uri.StartsWith("http"))
+            {
+                uri = NavigationManager.BaseUri + uri;
+            }
             context.Response.Redirect(uri, permanent: false);
         }
         else

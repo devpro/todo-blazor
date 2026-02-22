@@ -50,9 +50,6 @@ public class RealKestrelFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint
         ClientOptions.BaseAddress = addresses?.Select(x => new Uri(x)).Last()
             ?? throw new InvalidOperationException("No bound address found after Kestrel startup. Check for port conflicts or HTTPS-only config.");
 
-        // starts the TestServer host for factory internals
-        testHost.Start();
-
         // returns the TestServer host (factory expects it)
         return testHost;
     }

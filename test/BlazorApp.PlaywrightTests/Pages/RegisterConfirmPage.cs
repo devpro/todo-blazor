@@ -10,7 +10,7 @@ public class RegisterConfirmPage(IPage page) : PageBase(page)
 
     // locators
 
-    private ILocator ConfirmationLink => Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" });
+    private ILocator ConfirmationLink => Page.GetByRole(AriaRole.Link, new PageGetByRoleOptions { Name = "Click here to confirm your" });
 
     // actions
 

@@ -1,6 +1,7 @@
 ﻿@page "/Account/Manage"
 
 @using System.ComponentModel.DataAnnotations
+@using Devpro.TodoList.BlazorApp.Components.Validation
 @using Devpro.TodoList.BlazorApp.Identity
 @using Microsoft.AspNetCore.Identity
 
@@ -19,7 +20,7 @@
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <input type="text" value="@username" id="username" class="form-control" placeholder="Choose your username." disabled />
+                <input type="text" value="@_username" id="username" class="form-control" placeholder="Choose your username." disabled />
                 <label for="username" class="form-label">Username</label>
             </div>
             <div class="form-floating mb-3">
@@ -33,58 +34,63 @@
 </div>
 
 @code {
-    private ApplicationUser? user;
-    private string? username;
-    private string? phoneNumber;
+    private ApplicationUser? _user;
+    private string? _username;
+    private string? _phoneNumber;
 
     [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    private HttpContext HttpContext { get; set; } = null!;
 
     [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = default!;
+    private InputModel Input { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
-        Input ??= new();
+        Input ??= new InputModel();
 
-        user = await UserManager.GetUserAsync(HttpContext.User);
-        if (user is null)
+        _user = await UserManager.GetUserAsync(HttpContext.User);
+        if (_user is null)
         {
             RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
             return;
         }
 
-        username = await UserManager.GetUserNameAsync(user);
-        phoneNumber = await UserManager.GetPhoneNumberAsync(user);
+        _username = await UserManager.GetUserNameAsync(_user);
+        _phoneNumber = await UserManager.GetPhoneNumberAsync(_user);
 
-        Input.PhoneNumber ??= phoneNumber;
+        Input.PhoneNumber ??= _phoneNumber;
     }
 
     private async Task OnValidSubmitAsync()
     {
-        if (user is null)
+        if (_user is null)
         {
             RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
             return;
         }
 
-        if (Input.PhoneNumber != phoneNumber)
+        var isProfileUpdated = false;
+
+        var newPhoneNumber = Input.PhoneNumber?.Trim() ?? string.Empty;
+        if (_phoneNumber != newPhoneNumber)
         {
-            var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+            var setPhoneResult = await UserManager.SetPhoneNumberAsync(_user, newPhoneNumber);
             if (!setPhoneResult.Succeeded)
             {
                 RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to set phone number.", HttpContext);
                 return;
             }
+
+            isProfileUpdated = true;
         }
 
-        await SignInManager.RefreshSignInAsync(user);
-        RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
+        await SignInManager.RefreshSignInAsync(_user);
+        RedirectManager.RedirectToCurrentPageWithStatus(isProfileUpdated ? "Your profile has been updated" : "Info: No update needed", HttpContext);
     }
 
     private sealed class InputModel
     {
-        [Phone]
+        [OptionalPhone]
         [Display(Name = "Phone number")]
         public string? PhoneNumber { get; set; }
     }

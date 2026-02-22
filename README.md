@@ -7,41 +7,44 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B60068%2Fgithub.com%2Fdevpro%2Ftodo-blazor.svg?type=shield&issueType=license)](https://app.fossa.com/projects/custom%2B60068%2Fgithub.com%2Fdevpro%2Ftodo-blazor?ref=badge_shield&issueType=license)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B60068%2Fgithub.com%2Fdevpro%2Ftodo-blazor.svg?type=shield&issueType=security)](https://app.fossa.com/projects/custom%2B60068%2Fgithub.com%2Fdevpro%2Ftodo-blazor?ref=badge_shield&issueType=security)
 
-A simple todo list that runs as a web application (written with Blazor / C# / .NET).
+A simple todo list that runs in a web application powered Blazor and written in C# / .NET.
 
 For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions are more than welcome 🙂
 
-## Getting started
+## Quick demo (containers/Docker)
 
-Run the web application in a container:
+Start the database:
 
 ```bash
-docker run --rm -p 9001:8080 -e DatabaseSettings__ConnectionString=$MONGODB_CONNSTRING docker.io/devprofr/todoblazor:1.0.21711317943
+docker run --name mongodb8 -d -p 27017:27017 mongo:8.2
+```
+
+Run the web application:
+
+```bash
+docker run --rm -p 9001:8080 --link "mongodb8" -e DatabaseSettings__ConnectionString=mongodb://mongodb8:27017 docker.io/devprofr/todoblazor:latest
 ```
 
 Open [localhost:9001](http://localhost:9001)
 
-Configuration:
+## Deployment
 
-- MONGODB_CONNSTRING
-  
-  - `mongodb://localhost:27017` if local MongoDB without authentication (for example with `docker run --name mongodb8 -d -p 27017:27017 mongo:8.2`)
+Use the [Helm chart](https://github.com/devpro/helm-charts/tree/main/charts/todoblazor).
 
-## Operations
+## Backlog
 
-### Checking image signature
-
-<!--All images pushed to DockerHub are signed using Cosign (keyless mode via GitHub OIDC).-->
-
-```bash
-# predicts signature location
-docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
-  triangulate docker.io/devprofr/todoblazor:1.0.21711317943
-
-# verifies signature (recommended)
-docker run --rm ghcr.io/sigstore/cosign/cosign:latest \
-  verify \
-    --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
-    --certificate-identity-regexp="https://github.com/devpro/todo-blazor/.github/workflows/pkg.yml@.*" \
-    docker.io/devprofr/todoblazor:1.0.21711317943
-```
+- [x] Auth with users in MongoDB
+- [x] Todo list page
+- [x] Dockerfile
+- [x] Docker compose
+- [x] Helm chart
+- [x] Integration tests (xUnit v3)
+- [x] Code scan (linters, Sonar)
+- [x] CI/CD
+- [x] Badges in README
+- [x] Secret check (GitGuardian)
+- [x] License check (FOSSA)
+- [x] Health check (with db check)
+- [x] End-to-end tests (Playwright)
+- [x] BDD/Gherkin (Reqnroll)
+- [ ] Observability (OpenTelemetry SDK/Instrumentation)
