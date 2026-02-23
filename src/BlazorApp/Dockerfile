@@ -28,10 +28,14 @@ RUN --mount=type=secret,id=additional_file_name,env=ADDITIONAL_FILE_NAME \
 FROM registry.suse.com/bci/python:3.13 AS otel-fetch
 ARG OTEL_VERSION=1.14.1
 WORKDIR /tmp
-RUN curl -L -o otel.zip \
-    "https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/opentelemetry-dotnet-instrumentation-linux-glibc-x64.zip"
-RUN python3 -c 'import zipfile; zipfile.ZipFile("otel.zip").extractall("/otel-ai")' && \
-    rm -f otel.zip
+RUN curl --proto '=https' --fail-with-body -L -o checksums.txt \
+    "https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/checksums.txt" && \
+    curl --proto '=https' --fail-with-body -L -o otel.zip \
+    "https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/opentelemetry-dotnet-instrumentation-linux-glibc-x64.zip" && \
+    awk '/opentelemetry-dotnet-instrumentation-linux-glibc-x64\.zip/ { gsub(/\*/, ""); print $1 "  otel.zip" }' checksums.txt | \
+    sha256sum -c - && \
+    python3 -c 'import zipfile; zipfile.ZipFile("otel.zip").extractall("/otel-ai")' && \
+    rm -f otel.zip checksums.txt
 
 FROM base AS final
 WORKDIR /app

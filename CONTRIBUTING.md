@@ -40,6 +40,8 @@
       docker login
       docker build . -t devprofr/todoblazor:latest -f src/BlazorApp/Dockerfile
       docker push devprofr/todoblazor:latest
+      docker compose build --no-cache
+      DOCKER_BUILDKIT=1 docker compose build --no-cache --progress=plain
       -->
 
       - Run the container
