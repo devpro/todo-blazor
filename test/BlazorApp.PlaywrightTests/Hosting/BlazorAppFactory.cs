@@ -1,27 +1,43 @@
-﻿using Devpro.Common.Mvc.Testing;
-using Devpro.TodoList.BlazorApp.Components.Account;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting.Account;
+﻿using System.Net;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 
-public class BlazorAppFactory : RealKestrelFactory<Program>
+public class BlazorAppFactory : WebApplicationFactory<Program>
 {
-    protected override void ConfigureServices(IHostBuilder builder)
+    private int _serverPort;
+
+    public BlazorAppFactory()
     {
-        base.ConfigureServices(builder);
+        UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
+    }
 
-        // switches to a redirect manager to fix issue with successful login redirect
-        builder.ConfigureServices(services =>
+    public string ServerAddress
+    {
+        get
         {
-            var originalDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IdentityRedirectManager));
-            if (originalDescriptor != null)
-            {
-                services.Remove(originalDescriptor);
-            }
+            EnsureServerStarted();
+            return $"http://127.0.0.1:{_serverPort}/";
+        }
+    }
 
-            services.AddScoped<IdentityRedirectManager, BypassIdentityRedirectManager>();
-        });
+    private void EnsureServerStarted()
+    {
+        if (_serverPort != 0) return;
+
+        // forces Kestrel binding
+        StartServer();
+
+        // extracts dynamic port
+        var server = Services.GetRequiredService<IServer>();
+        var addressesFeature = server.Features.Get<IServerAddressesFeature>();
+        var address = addressesFeature?.Addresses.FirstOrDefault() ?? throw new InvalidOperationException("No bound address found.");
+
+        // parses port (address may be "http://[::]:51234")
+        var uri = new Uri(address);
+        _serverPort = uri.Port;
     }
 }
