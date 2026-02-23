@@ -78,6 +78,24 @@ docker compose up --build
 docker compose down
 ```
 
+If there is an issue with OpenTelemetry auto-instrumentation:
+
+- Look in `/logs/otel`
+
+- Switch to console exporter (instead of otlp) and set log level to debug
+
+```bash
+services:
+  webapp:
+    image: devprofr/todoblazor:latest
+    environment:
+      # ...
+      - OTEL_TRACES_EXPORTER=console
+      - OTEL_METRICS_EXPORTER=console
+      - OTEL_LOGS_EXPORTER=console
+      - OTEL_LOG_LEVEL=debug
+```
+
 ### Test setup
 
 Make sure PowerShell 7+ is installed:
@@ -116,6 +134,11 @@ The file `TodoBlazor.sln.DotSettings` is versioned and contains the following fi
   - **File** > **Settings** > **Build, Execution, Deployment** > **Unit Testing** > **VSTest**: `Enable VSTest adapters support` must be unchecked
     (see [xunit/visualstudio.xunit/issues/436](https://github.com/xunit/visualstudio.xunit/issues/436#issuecomment-2687240662))
 
+Shortcuts (assuming **Visual Studio** mapping):
+
+- `Ctrl`+`Alt`+`Enter` formats the current file
+- `Ctrl`+`Alt`+`/` (num) comments/uncomments the selected lines
+
 ### Visual Studio 2022/2026
 
 Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-visual-studio)
@@ -126,6 +149,14 @@ NuGet packages:
 
 - xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
 - FIXED ~~Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9~~
+
+## Quality gates
+
+### yamllint
+
+```bash
+docker run --rm -v "$(pwd)":/data cytopia/yamllint .
+```
 
 ## Operations
 
