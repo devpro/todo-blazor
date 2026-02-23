@@ -1,5 +1,5 @@
 services:
-  webapi:
+  webapp:
     image: devprofr/todoblazor:local
     build:
       context: .

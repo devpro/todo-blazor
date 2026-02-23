@@ -25,8 +25,30 @@ RUN --mount=type=secret,id=additional_file_name,env=ADDITIONAL_FILE_NAME \
         echo "$ADDITIONAL_FILE_CONTENT" > "/app/publish/${ADDITIONAL_FILE_NAME}"; \
     fi
 
+FROM registry.suse.com/bci/python:3.13 AS otel-fetch
+ARG OTEL_VERSION=1.14.1
+WORKDIR /tmp
+RUN curl -L -o otel.zip \
+    "https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/opentelemetry-dotnet-instrumentation-linux-glibc-x64.zip"
+RUN python3 -c 'import zipfile; zipfile.ZipFile("otel.zip").extractall("/otel-ai")' && \
+    rm -f otel.zip
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=otel-fetch /otel-ai/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so /otel-ai/linux-x64/
+COPY --from=otel-fetch /otel-ai/net/OpenTelemetry*.dll /otel-ai/net/
+COPY --from=otel-fetch /otel-ai/net/ruleEngine.json /otel-ai/net/
+COPY --from=otel-fetch /otel-ai/AdditionalDeps /otel-ai/AdditionalDeps/
+COPY --from=otel-fetch /otel-ai/store /otel-ai/store/
+ENV OTEL_DOTNET_AUTO_HOME=/otel-ai \
+    CORECLR_ENABLE_PROFILING=1 \
+    CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318} \
+    CORECLR_PROFILER_PATH=/otel-ai/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so \
+    DOTNET_ADDITIONAL_DEPS=/otel-ai/AdditionalDeps \
+    DOTNET_SHARED_STORE=/otel-ai/store \
+    DOTNET_STARTUP_HOOKS=/otel-ai/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient,MongoDB
 USER $APP_UID
 ENTRYPOINT ["dotnet", "Devpro.TodoList.BlazorApp.dll"]

@@ -1,15 +1,31 @@
 name: tfbackmdb
 
 services:
-  webapi:
+  webapp:
     image: devprofr/todoblazor:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - DatabaseSettings__ConnectionString=mongodb://mongodb:27017
+      - OTEL_SERVICE_NAME=todo-blazor-webapp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=otlp
+#      - OTEL_TRACES_EXPORTER=console
+#      - OTEL_METRICS_EXPORTER=console
+#      - OTEL_LOGS_EXPORTER=console
+#      - OTEL_LOG_LEVEL=debug
+      - OTEL_DOTNET_AUTO_LOGS_INCLUDE_FORMATTED_MESSAGE=true
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local,service.version=local-build
+      - OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient,MongoDB
     ports:
       - "9001:8080"
     depends_on:
       - mongodb
+      - otel-collector
+    volumes:
+      - ./logs/otel:/var/log/opentelemetry/dotnet
 
   mongodb:
     image: mongo:8.2
@@ -17,6 +33,20 @@ services:
       - "27017:27017"
     volumes:
       - db-data:/data/db
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.145.0
+    command: [ "--config=/etc/otelcol/config.yaml" ]
+    volumes:
+      - ./demo/otel-collector-config.yaml:/etc/otelcol/config.yaml:ro
+    environment:
+      - MONGODB_ENDPOINT=mongodb:27017
+    ports:
+      - "4318:4318"
+      - "4317:4317"
+      - "8889:8889"
+    depends_on:
+      - mongodb
 
 volumes:
   db-data:
