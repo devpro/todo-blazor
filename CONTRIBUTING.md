@@ -104,6 +104,11 @@ pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 codegen htt
 
 Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-rider)
 
+To disable Playwright headless browser testing (see what's really happening):
+
+- Open "File | Settings | Build, Execution, Deployment | Unit Testing | Test Runner"
+- Add an environment variable: "HEADED" = 1
+
 The file `TodoBlazor.sln.DotSettings` is versioned and contains the following fix:
 
 - Remove duplication in the test view:
