@@ -45,6 +45,10 @@ COPY --from=otel-fetch /otel-ai/net/OpenTelemetry*.dll /otel-ai/net/
 COPY --from=otel-fetch /otel-ai/net/ruleEngine.json /otel-ai/net/
 COPY --from=otel-fetch /otel-ai/AdditionalDeps /otel-ai/AdditionalDeps/
 COPY --from=otel-fetch /otel-ai/store /otel-ai/store/
+USER root
+RUN chown -R $APP_UID:$APP_UID /otel-ai && \
+    chmod -R 755 /otel-ai
+USER $APP_UID
 ENV OTEL_DOTNET_AUTO_HOME=/otel-ai \
     CORECLR_ENABLE_PROFILING=1 \
     CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318} \
@@ -54,5 +58,4 @@ ENV OTEL_DOTNET_AUTO_HOME=/otel-ai \
     DOTNET_STARTUP_HOOKS=/otel-ai/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll \
     DOTNET_RUNNING_IN_CONTAINER=true \
     OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient,MongoDB
-USER $APP_UID
 ENTRYPOINT ["dotnet", "Devpro.TodoList.BlazorApp.dll"]
