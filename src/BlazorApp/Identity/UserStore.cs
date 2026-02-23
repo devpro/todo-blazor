@@ -19,14 +19,6 @@ public class UserStore<TUser>(DbContext context, IdentityErrorDescriber? describ
 {
 }
 
-public class UserStore<TUser, TRole, TContext>(TContext context, IdentityErrorDescriber? describer = null)
-    : UserStore<TUser, TRole, TContext, ObjectId>(context, describer)
-    where TUser : ApplicationUser
-    where TRole : IdentityRole<ObjectId>
-    where TContext : DbContext
-{
-}
-
 public class UserStore<TUser, TRole, TContext, TKey>(TContext context, IdentityErrorDescriber? describer = null)
     : UserStore<TUser, TRole, TContext, TKey, IdentityUserClaim<TKey>, IdentityUserRole<TKey>, IdentityUserLogin<TKey>, IdentityUserToken<TKey>, IdentityRoleClaim<TKey>>(context, describer)
     where TUser : IdentityUser<TKey>
@@ -48,10 +40,13 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
     where TUserToken : IdentityUserToken<TKey>, new()
     where TRoleClaim : IdentityRoleClaim<TKey>, new()
 {
-    protected DbSet<TUser> UsersSet { get { return Context.Set<TUser>(); } }
-    protected DbSet<TRole> Roles { get { return Context.Set<TRole>(); } }
+    private DbSet<TUser> UsersSet { get { return Context.Set<TUser>(); } }
+
+    private DbSet<TRole> Roles { get { return Context.Set<TRole>(); } }
+
     private DbSet<TUserClaim> UserClaims { get { return Context.Set<TUserClaim>(); } }
-    protected DbSet<TUserRole> UserRoles { get { return Context.Set<TUserRole>(); } }
+
+    private DbSet<TUserRole> UserRoles { get { return Context.Set<TUserRole>(); } }
 
     public override Task<TUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {

@@ -12,17 +12,8 @@ public class RoleStore<TRole>(ApplicationDbContext context, IdentityErrorDescrib
 {
 }
 
-public class RoleStore<TRole, TContext>(TContext context, IdentityErrorDescriber? describer = null)
-    : RoleStore<TRole, TContext, string>(context, describer)
-    where TRole : IdentityRole<string>
-    where TContext : DbContext
-{
-}
-
 public class RoleStore<TRole, TContext, TKey>(TContext context, IdentityErrorDescriber? describer = null)
-    : RoleStore<TRole, TContext, TKey, IdentityUserRole<TKey>, IdentityRoleClaim<TKey>>(context, describer),
-    IQueryableRoleStore<TRole>,
-    IRoleClaimStore<TRole>
+    : RoleStore<TRole, TContext, TKey, IdentityUserRole<TKey>, IdentityRoleClaim<TKey>>(context, describer)
     where TRole : IdentityRole<TKey>
     where TKey : IEquatable<TKey>
     where TContext : DbContext
