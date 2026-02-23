@@ -8,4 +8,3 @@ Background:
 Scenario: Todo creation
   When I open the todo page
   And I add todo "Buy milk"
-  # Then the todo list should contain "Buy milk"
