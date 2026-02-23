@@ -43,7 +43,7 @@ jobs:
     with:
       custom-commands: |
         dotnet build --no-restore --configuration Debug test/BlazorApp.PlaywrightTests
-        pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 install --with-deps
+        pwsh test/BlazorApp.PlaywrightTests/bin/Debug/net10.0/playwright.ps1 install chromium
       extra-vars: |
         Application__IsHttpsRedirectionEnabled="false"
       mongodb-enabled: true
