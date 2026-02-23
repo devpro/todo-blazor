@@ -1,5 +1,5 @@
 ﻿// hack: overrides https://github.com/dotnet/dotnet/blob/main/src/aspnetcore/src/Identity/EntityFrameworkCore/src/UserStore.cs to make it work with MongoDB EF Provider
-
+#pragma warning disable S2436
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
@@ -86,3 +86,5 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
             [];
     }
 }
+
+#pragma warning restore S2436

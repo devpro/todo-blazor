@@ -1,5 +1,5 @@
 ﻿// hack: overrides https://github.com/dotnet/dotnet/blob/main/src/aspnetcore/src/Identity/EntityFrameworkCore/src/RoleStore.cs to make it work with MongoDB EF Provider
-
+#pragma warning disable S2436
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
@@ -29,3 +29,5 @@ public class RoleStore<TRole, TContext, TKey, TUserRole, TRoleClaim>(TContext co
     where TRoleClaim : IdentityRoleClaim<TKey>, new()
 {
 }
+
+#pragma warning restore S2436
