@@ -25,6 +25,7 @@ async function retry() {
   try {
     const successful = await Blazor.reconnect();
     if (!successful) {
+      // we reached the server, but it rejected the connection (e.g., unknown circuit ID)
       const resumeSuccessful = await Blazor.resumeCircuit();
       if (resumeSuccessful) {
         reconnectModal.close();
@@ -32,7 +33,8 @@ async function retry() {
         location.reload();
       }
     }
-  } catch (err) {
+  } catch {
+    // we didn't reach the server
     document.addEventListener("visibilitychange", retryWhenDocumentBecomesVisible);
   }
 }

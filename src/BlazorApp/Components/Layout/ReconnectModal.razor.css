@@ -30,9 +30,11 @@
   opacity: 0;
   transition: display 0.5s allow-discrete, overlay 0.5s allow-discrete;
   animation: components-reconnect-modal-fadeOutOpacity 0.5s both;
-  &[open]
-  {
-    animation: components-reconnect-modal-slideUp 1.5s cubic-bezier(.05, .89, .25, 1.02) 0.3s, components-reconnect-modal-fadeInOpacity 0.5s ease-in-out 0.3s;
+  &[open] {
+    animation-name: components-reconnect-modal-slideUp, components-reconnect-modal-fadeInOpacity;
+    animation-duration: 1.5s, 0.5s;
+    animation-timing-function: cubic-bezier(.05, .89, .25, 1.02), ease-in-out;
+    animation-delay: 0.3s, 0.3s;
     animation-fill-mode: both;
   }
 }
@@ -88,7 +90,7 @@
 #components-reconnect-modal button {
   border: 0;
   background-color: #6b9ed2;
-  color: white;
+  color: #0d1117;
   padding: 4px 24px;
   border-radius: 4px;
 }
