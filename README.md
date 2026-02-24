@@ -33,18 +33,16 @@ Use the [Helm chart](https://github.com/devpro/helm-charts/tree/main/charts/todo
 
 ## Backlog
 
-- [x] Auth with users in MongoDB
+- [x] Authentication with ASP.NET Identity and MongoDB
 - [x] Todo list page
-- [x] Dockerfile
-- [x] Docker compose
-- [x] Helm chart
+- [x] Containerization (Dockerfile, Docker compose)
+- [x] Kubernetes definition (Helm chart)
 - [x] Integration tests (xUnit v3)
-- [x] Code scan (linters, Sonar)
-- [x] CI/CD
-- [x] Badges in README
+- [x] Code quality (linters, Sonar)
+- [x] CI/CD pipelines with reusable workflows
 - [x] Secret check (GitGuardian)
 - [x] License check (FOSSA)
-- [x] Health check (with db check)
+- [x] Health check (with db)
 - [x] End-to-end tests (Playwright)
 - [x] BDD/Gherkin (Reqnroll)
-- [ ] Observability (OpenTelemetry SDK/Instrumentation)
+- [x] Observability (OpenTelemetry SDK/Instrumentation)

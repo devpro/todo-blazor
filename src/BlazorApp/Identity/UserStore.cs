@@ -1,5 +1,5 @@
 ﻿// hack: overrides https://github.com/dotnet/dotnet/blob/main/src/aspnetcore/src/Identity/EntityFrameworkCore/src/UserStore.cs to make it work with MongoDB EF Provider
-
+#pragma warning disable S2436
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
@@ -16,14 +16,6 @@ public class UserStore(ApplicationDbContext context, IdentityErrorDescriber? des
 public class UserStore<TUser>(DbContext context, IdentityErrorDescriber? describer = null)
     : UserStore<TUser, IdentityRole<ObjectId>, DbContext, ObjectId>(context, describer)
     where TUser : ApplicationUser, new()
-{
-}
-
-public class UserStore<TUser, TRole, TContext>(TContext context, IdentityErrorDescriber? describer = null)
-    : UserStore<TUser, TRole, TContext, ObjectId>(context, describer)
-    where TUser : ApplicationUser
-    where TRole : IdentityRole<ObjectId>
-    where TContext : DbContext
 {
 }
 
@@ -48,10 +40,13 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
     where TUserToken : IdentityUserToken<TKey>, new()
     where TRoleClaim : IdentityRoleClaim<TKey>, new()
 {
-    protected DbSet<TUser> UsersSet { get { return Context.Set<TUser>(); } }
-    protected DbSet<TRole> Roles { get { return Context.Set<TRole>(); } }
+    private DbSet<TUser> UsersSet { get { return Context.Set<TUser>(); } }
+
+    private DbSet<TRole> Roles { get { return Context.Set<TRole>(); } }
+
     private DbSet<TUserClaim> UserClaims { get { return Context.Set<TUserClaim>(); } }
-    protected DbSet<TUserRole> UserRoles { get { return Context.Set<TUserRole>(); } }
+
+    private DbSet<TUserRole> UserRoles { get { return Context.Set<TUserRole>(); } }
 
     public override Task<TUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
@@ -91,3 +86,5 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
             [];
     }
 }
+
+#pragma warning restore S2436

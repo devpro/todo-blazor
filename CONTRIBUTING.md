@@ -40,6 +40,8 @@
       docker login
       docker build . -t devprofr/todoblazor:latest -f src/BlazorApp/Dockerfile
       docker push devprofr/todoblazor:latest
+      docker compose build --no-cache
+      DOCKER_BUILDKIT=1 docker compose build --no-cache --progress=plain
       -->
 
       - Run the container
@@ -76,6 +78,24 @@ docker compose up --build
 
 ```bash
 docker compose down
+```
+
+If there is an issue with OpenTelemetry auto-instrumentation:
+
+- Look in `/logs/otel`
+
+- Switch to console exporter (instead of otlp) and set log level to debug
+
+```bash
+services:
+  webapp:
+    image: devprofr/todoblazor:latest
+    environment:
+      # ...
+      - OTEL_TRACES_EXPORTER=console
+      - OTEL_METRICS_EXPORTER=console
+      - OTEL_LOGS_EXPORTER=console
+      - OTEL_LOG_LEVEL=debug
 ```
 
 ### Test setup
@@ -116,16 +136,76 @@ The file `TodoBlazor.sln.DotSettings` is versioned and contains the following fi
   - **File** > **Settings** > **Build, Execution, Deployment** > **Unit Testing** > **VSTest**: `Enable VSTest adapters support` must be unchecked
     (see [xunit/visualstudio.xunit/issues/436](https://github.com/xunit/visualstudio.xunit/issues/436#issuecomment-2687240662))
 
+Shortcuts (assuming **Visual Studio** mapping):
+
+- `Ctrl`+`Alt`+`Enter` formats the current file
+- `Ctrl`+`Alt`+`/` (num) comments/uncomments the selected lines
+
 ### Visual Studio 2022/2026
 
 Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup-ide.html#setup-visual-studio)
 
 ## Limitations
 
-NuGet packages:
+### NuGet packages
 
-- xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
+- xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence of JunitXml.TestLogger 8)
 - FIXED ~~Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9~~
+
+### OpenTelemetry auto-instrumentation
+
+Specific instrumentation can be disabled from the configuration:
+
+```yaml
+services:
+  webapp:
+    environment:
+      # ...
+      # - OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED=false
+```
+
+MongoDB instrumentation had to be disabled (supposed to work but maybe an issue with ASP.NET Identity/Entity Framework provider):
+
+```yaml
+services:
+  webapp:
+    environment:
+      # ...
+      # - OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient,MongoDB
+      - OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient
+```
+
+Because of the error seen in otel logs:
+
+> The property or field 'EndPoint' for the proxy property 'EndPoint' was not found in the instance of type 'MongoDB.Driver.OperationContext'
+
+<!--
+[2026-02-24T00:14:10.3837534Z] [Error] The type initializer for 'OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4' threw an exception.
+Exception: The type initializer for 'OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4' threw an exception.
+System.TypeInitializationException: The type initializer for 'OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4' threw an exception.
+ ---> OpenTelemetry.AutoInstrumentation.CallTarget.CallTargetInvokerException: The property or field 'EndPoint' for the proxy property 'EndPoint' was not found in the instance of type 'MongoDB.Driver.OperationContext'.
+---> OpenTelemetry.AutoInstrumentation.DuckTyping.DuckTypePropertyOrFieldNotFoundException: The property or field 'EndPoint' for the proxy property 'EndPoint' was not found in the instance of type 'MongoDB.Driver.OperationContext'.
+at OpenTelemetry.AutoInstrumentation.DuckTyping.DuckTypePropertyOrFieldNotFoundException.Throw(String name, String duckAttributeName, Type type)
+at OpenTelemetry.AutoInstrumentation.DuckTyping.DuckType.CreateProperties(TypeBuilder proxyTypeBuilder, Type proxyDefinitionType, Type targetType, FieldInfo instanceField)
+at OpenTelemetry.AutoInstrumentation.DuckTyping.DuckType.CreateProxyType(Type proxyDefinitionType, Type targetType, Boolean dryRun)
+--- End of stack trace from previous location ---
+at OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.IntegrationMapper.CreateBeginMethodDelegate(Type integrationType, Type targetType, Type[] argumentsTypes)
+at OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4..cctor()
+   --- End of inner exception stack trace ---
+   at OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4..cctor()
+--- End of inner exception stack trace ---
+at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.Execute(OperationContext operationContext, IConnection connection)
+-->
+
+Using [MongoDB.Driver.Core.Extensions.DiagnosticSources](https://github.com/jbogard/MongoDB.Driver.Core.Extensions.DiagnosticSources) means referencing OpenTelemetry + config in the code.
+
+## Quality gates
+
+### yamllint
+
+```bash
+docker run --rm -v "$(pwd)":/data cytopia/yamllint .
+```
 
 ## Operations
 

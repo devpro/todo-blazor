@@ -8,7 +8,7 @@ namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Steps
 {
     public class StepBase(ScenarioContext scenarioContext)
     {
-        protected readonly Faker _faker = new();
+        private readonly Faker _faker = new();
 
         protected readonly ScenarioContext _scenarioContext = scenarioContext;
 
