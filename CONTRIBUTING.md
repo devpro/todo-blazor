@@ -147,10 +147,57 @@ Install [Reqnroll extension](https://docs.reqnroll.net/latest/installation/setup
 
 ## Limitations
 
-NuGet packages:
+### NuGet packages
 
-- xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence with JunitXml.TestLogger 8)
+- xunit.v3 3.2.2 doesn't work with Microsoft.Testing.Platform 2 (and as a consequence of JunitXml.TestLogger 8)
 - FIXED ~~Keep version 9 of ASP.NET EF (Entity Framework) for now, as version 10 introduces breaking changes for MongoDB EF Provider 9~~
+
+### OpenTelemetry auto-instrumentation
+
+Specific instrumentation can be disabled from the configuration:
+
+```yaml
+services:
+  webapp:
+    environment:
+      # ...
+      # - OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED=false
+```
+
+MongoDB instrumentation had to be disabled (supposed to work but maybe an issue with ASP.NET Identity/Entity Framework provider):
+
+```yaml
+services:
+  webapp:
+    environment:
+      # ...
+      # - OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient,MongoDB
+      - OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient
+```
+
+Because of the error seen in otel logs:
+
+> The property or field 'EndPoint' for the proxy property 'EndPoint' was not found in the instance of type 'MongoDB.Driver.OperationContext'
+
+<!--
+[2026-02-24T00:14:10.3837534Z] [Error] The type initializer for 'OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4' threw an exception.
+Exception: The type initializer for 'OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4' threw an exception.
+System.TypeInitializationException: The type initializer for 'OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4' threw an exception.
+ ---> OpenTelemetry.AutoInstrumentation.CallTarget.CallTargetInvokerException: The property or field 'EndPoint' for the proxy property 'EndPoint' was not found in the instance of type 'MongoDB.Driver.OperationContext'.
+---> OpenTelemetry.AutoInstrumentation.DuckTyping.DuckTypePropertyOrFieldNotFoundException: The property or field 'EndPoint' for the proxy property 'EndPoint' was not found in the instance of type 'MongoDB.Driver.OperationContext'.
+at OpenTelemetry.AutoInstrumentation.DuckTyping.DuckTypePropertyOrFieldNotFoundException.Throw(String name, String duckAttributeName, Type type)
+at OpenTelemetry.AutoInstrumentation.DuckTyping.DuckType.CreateProperties(TypeBuilder proxyTypeBuilder, Type proxyDefinitionType, Type targetType, FieldInfo instanceField)
+at OpenTelemetry.AutoInstrumentation.DuckTyping.DuckType.CreateProxyType(Type proxyDefinitionType, Type targetType, Boolean dryRun)
+--- End of stack trace from previous location ---
+at OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.IntegrationMapper.CreateBeginMethodDelegate(Type integrationType, Type targetType, Type[] argumentsTypes)
+at OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4..cctor()
+   --- End of inner exception stack trace ---
+   at OpenTelemetry.AutoInstrumentation.CallTarget.Handlers.BeginMethodHandler`4..cctor()
+--- End of inner exception stack trace ---
+at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.Execute(OperationContext operationContext, IConnection connection)
+-->
+
+Using [MongoDB.Driver.Core.Extensions.DiagnosticSources](https://github.com/jbogard/MongoDB.Driver.Core.Extensions.DiagnosticSources) means referencing OpenTelemetry + config in the code.
 
 ## Quality gates
 

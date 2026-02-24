@@ -8,8 +8,11 @@ receivers:
   mongodb:
     hosts:
       - endpoint: ${env:MONGODB_ENDPOINT}
+    replica_set: rs0
+    direct_connection: true
+    timeout: 30s
     collection_interval: 30s
-    initial_delay: 1s
+    initial_delay: 30s
     tls:
       insecure: true
       insecure_skip_verify: true
@@ -18,20 +21,23 @@ processors:
   batch: {}
 
 exporters:
-  debug:
+  debug/detailed:
     verbosity: detailed
+  debug/minimal:
+    verbosity: basic
+  nop: {}
 
 service:
   pipelines:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug/detailed]
     metrics:
-      receivers: [otlp, mongodb]
+      receivers: [otlp,mongodb]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug/minimal]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug/detailed]

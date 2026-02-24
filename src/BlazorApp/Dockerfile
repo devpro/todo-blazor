@@ -40,11 +40,10 @@ RUN curl --proto '=https' --fail-with-body -L -o checksums.txt \
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=otel-fetch /otel-ai/AdditionalDeps/shared/Microsoft.NETCore.App/10.0.0 /otel-ai/AdditionalDeps/shared/Microsoft.NETCore.App/10.0.0/
 COPY --from=otel-fetch /otel-ai/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so /otel-ai/linux-x64/
-COPY --from=otel-fetch /otel-ai/net/OpenTelemetry*.dll /otel-ai/net/
-COPY --from=otel-fetch /otel-ai/net/ruleEngine.json /otel-ai/net/
-COPY --from=otel-fetch /otel-ai/AdditionalDeps /otel-ai/AdditionalDeps/
-COPY --from=otel-fetch /otel-ai/store /otel-ai/store/
+COPY --from=otel-fetch /otel-ai/net/*.* /otel-ai/net/
+COPY --from=otel-fetch /otel-ai/store/x64/net10.0 /otel-ai/store/x64/net10.0/
 USER root
 RUN chown -R $APP_UID:$APP_UID /otel-ai && \
     chmod -R 755 /otel-ai
@@ -56,6 +55,5 @@ ENV OTEL_DOTNET_AUTO_HOME=/otel-ai \
     DOTNET_ADDITIONAL_DEPS=/otel-ai/AdditionalDeps \
     DOTNET_SHARED_STORE=/otel-ai/store \
     DOTNET_STARTUP_HOOKS=/otel-ai/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll \
-    DOTNET_RUNNING_IN_CONTAINER=true \
-    OTEL_DOTNET_AUTO_INSTRUMENTATIONS=AspNetCore,HttpClient,MongoDB
+    DOTNET_RUNNING_IN_CONTAINER=true
 ENTRYPOINT ["dotnet", "Devpro.TodoList.BlazorApp.dll"]
