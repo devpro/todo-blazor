@@ -34,7 +34,7 @@ service:
       processors: [batch]
       exporters: [debug/detailed]
     metrics:
-      receivers: [otlp,mongodb]
+      receivers: [otlp, mongodb]
       processors: [batch]
       exporters: [debug/minimal]
     traces:
