@@ -2,7 +2,7 @@
 
 namespace Devpro.TodoList.BlazorApp.Repositories;
 
-public abstract class RepositoryBase(IMongoDatabase mongoDatabase, ILogger<TodoItemRepository> logger)
+public abstract class RepositoryBase(IMongoDatabase mongoDatabase, ILogger<RepositoryBase> logger)
 {
     protected abstract string CollectionName { get; }
 
