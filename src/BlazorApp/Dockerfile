@@ -55,5 +55,7 @@ ENV OTEL_DOTNET_AUTO_HOME=/otel-ai \
     DOTNET_ADDITIONAL_DEPS=/otel-ai/AdditionalDeps \
     DOTNET_SHARED_STORE=/otel-ai/store \
     DOTNET_STARTUP_HOOKS=/otel-ai/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll \
-    DOTNET_RUNNING_IN_CONTAINER=true
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_NOLOGO=1
 ENTRYPOINT ["dotnet", "Devpro.TodoList.BlazorApp.dll"]
