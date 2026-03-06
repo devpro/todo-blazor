@@ -1,14 +1,18 @@
-﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
+﻿using System;
+using System.Threading.Tasks;
+using Withywoods.AspNetCore.Mvc.Testing;
+
+namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 
 public class BlazorAppFixture : IAsyncDisposable
 {
-    private BlazorAppFactory Factory { get; }
+    private KestrelWebAppFactory<Program> Factory { get; }
 
     public string ServerAddress => Factory.ServerAddress;
 
     public BlazorAppFixture()
     {
-        Factory = new BlazorAppFactory();
+        Factory = new KestrelWebAppFactory<Program>();
         Factory.CreateDefaultClient();
     }
 

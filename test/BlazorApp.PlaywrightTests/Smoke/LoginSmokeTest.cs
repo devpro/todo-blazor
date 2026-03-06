@@ -1,9 +1,12 @@
-﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
+﻿using System.Threading.Tasks;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
+using Withywoods.AspNetCore.Mvc.Testing;
+using Xunit;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 
-public class LoginSmokeTest(BlazorAppFactory factory) : SmokeTestBase(factory)
+public class LoginSmokeTest(KestrelWebAppFactory<Program> factory)
+    : SmokeTestBase(factory)
 {
     [Fact]
     [ScreenshotOnFailure]

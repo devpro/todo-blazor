@@ -2,6 +2,7 @@
 
 namespace Devpro.TodoList.BlazorApp.Components.Validation;
 
+[AttributeUsage(AttributeTargets.Property)]
 public class OptionalPhoneAttribute : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)

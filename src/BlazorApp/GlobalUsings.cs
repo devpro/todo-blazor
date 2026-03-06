@@ -1,0 +1,9 @@
+﻿global using Devpro.TodoList.BlazorApp.Components;
+global using Devpro.TodoList.BlazorApp.Components.Account;
+global using Devpro.TodoList.BlazorApp.Configuration;
+global using Devpro.TodoList.BlazorApp.DependencyInjection;
+global using Devpro.TodoList.BlazorApp.Identity;
+global using Devpro.TodoList.BlazorApp.Repositories;
+global using Microsoft.AspNetCore.Components.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;

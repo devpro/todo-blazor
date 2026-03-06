@@ -1,6 +1,4 @@
-﻿using Devpro.TodoList.BlazorApp.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Devpro.TodoList.BlazorApp.Components.Account
 {

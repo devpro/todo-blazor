@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Devpro.TodoList.BlazorApp.Components.Account;
 using Devpro.TodoList.BlazorApp.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using Moq;
+using Xunit;
 
 namespace Devpro.TodoList.BlazorApp.UnitTests.Components.Account;
 

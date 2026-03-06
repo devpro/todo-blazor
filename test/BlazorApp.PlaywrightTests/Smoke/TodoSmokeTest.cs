@@ -1,11 +1,16 @@
-﻿using AwesomeAssertions;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
+﻿using System.Threading.Tasks;
+using AwesomeAssertions;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
+using Withywoods.AspNetCore.Mvc.Testing;
+using Xunit;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 
-public class TodoSmokeTest(BlazorAppFactory factory) : SmokeTestBase(factory)
+public class TodoSmokeTest(KestrelWebAppFactory<Program> factory)
+    : SmokeTestBase(factory)
 {
     [Fact]
+    [ScreenshotOnFailure]
     public async Task ManageTodo_WithCreateUpdateDelete_Succeeds()
     {
         var userInfo = new { Email = _faker.Internet.Email(), Password = _faker.Internet.Password(8) + "aA9!" };
