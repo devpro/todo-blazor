@@ -1,4 +1,5 @@
-﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
+﻿using System.Threading.Tasks;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 using Reqnroll;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Steps;

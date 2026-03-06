@@ -1,10 +1,13 @@
-﻿using AwesomeAssertions;
+﻿using System.Threading.Tasks;
+using AwesomeAssertions;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
+using Withywoods.AspNetCore.Mvc.Testing;
+using Xunit;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 
-public class TodoSmokeTest(BlazorAppFactory factory) : SmokeTestBase(factory)
+public class TodoSmokeTest(KestrelWebAppFactory<Program> factory)
+    : SmokeTestBase(factory)
 {
     [Fact]
     [ScreenshotOnFailure]

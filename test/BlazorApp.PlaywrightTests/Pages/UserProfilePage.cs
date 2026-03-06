@@ -1,4 +1,5 @@
-﻿using Microsoft.Playwright;
+﻿using System.Threading.Tasks;
+using Microsoft.Playwright;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 

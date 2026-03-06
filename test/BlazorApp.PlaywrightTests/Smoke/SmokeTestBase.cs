@@ -1,12 +1,16 @@
-﻿using Bogus;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
+﻿using System;
+using System.Threading.Tasks;
+using Bogus;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 using Microsoft.Playwright;
 using Microsoft.Playwright.Xunit.v3;
+using Withywoods.AspNetCore.Mvc.Testing;
+using Xunit;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 
-public abstract class SmokeTestBase(BlazorAppFactory factory) : PageTest(), IClassFixture<BlazorAppFactory>
+public abstract class SmokeTestBase(KestrelWebAppFactory<Program> factory)
+    : PageTest(), IClassFixture<KestrelWebAppFactory<Program>>
 {
     protected readonly Faker _faker = new();
 

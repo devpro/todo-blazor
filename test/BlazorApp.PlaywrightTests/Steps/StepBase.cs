@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using System;
+using Bogus;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
 using Microsoft.Playwright;
@@ -25,12 +26,9 @@ namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Steps
         protected T GetCurrentPage<T>()
             where T : PageBase
         {
-            if (!_scenarioContext.TryGetValue<T>(ScenarioContextKeys.CurrentPage, out var page))
-            {
-                throw new Exception($"Not on ${typeof(T)} page");
-            }
-
-            return page;
+            return _scenarioContext.TryGetValue<T>(ScenarioContextKeys.CurrentPage, out var page)
+                ? page
+                : throw new Exception($"Not on ${typeof(T)} page");
         }
 
         protected string GenerateEmail()

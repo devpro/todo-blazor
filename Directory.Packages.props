@@ -6,29 +6,26 @@
   <ItemGroup>
     <PackageVersion Include="AwesomeAssertions" Version="9.4.0" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
-    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
-    <PackageVersion Include="JunitXml.TestLogger" Version="7.1.0" />
     <PackageVersion Include="Metalama.Framework" Version="2026.1.2-preview" />
     <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.3" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.58.0" />
     <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.58.0" />
-    <PackageVersion Include="Microsoft.Testing.Platform" Version="1.9.1" />
-    <PackageVersion Include="MongoDB.Bson" Version="3.6.0" />
-    <PackageVersion Include="MongoDB.Driver" Version="3.6.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="2.1.0" />
+    <PackageVersion Include="MongoDB.Bson" Version="3.7.0" />
+    <PackageVersion Include="MongoDB.Driver" Version="3.7.0" />
     <PackageVersion Include="MongoDB.EntityFrameworkCore" Version="10.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Reqnroll" Version="3.3.3" />
     <PackageVersion Include="Reqnroll.xunit.v3" Version="3.3.3" />
     <PackageVersion Include="SharpCompress" Version="0.44.5" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="xunit.v3" Version="3.2.2" />
-    <!--
-    ideas: switch to Microsoft.Testing.Extensions.CodeCoverage (instead of JunitXml.TestLogger)
-    -->
+    <PackageVersion Include="Withywoods.Configuration" Version="2.0.1" />
+    <PackageVersion Include="Withywoods.AspNetCore.Mvc.Testing" Version="2.0.1" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
   </ItemGroup>
 </Project>

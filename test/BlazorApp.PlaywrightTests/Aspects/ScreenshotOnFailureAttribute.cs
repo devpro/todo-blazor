@@ -1,10 +1,12 @@
-﻿using Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
+﻿using System;
+using System.Threading.Tasks;
+using Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 using Metalama.Framework.Aspects;
 
 namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
 
 [CompileTime]
-public class ScreenshotOnFailureAttribute : OverrideMethodAspect
+internal class ScreenshotOnFailureAttribute : OverrideMethodAspect
 {
     public override dynamic? OverrideMethod()
     {
