@@ -2,8 +2,6 @@
 #pragma warning disable S2436
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 
 namespace Devpro.TodoList.BlazorApp.Identity;
@@ -81,7 +79,7 @@ public class UserStore<TUser, TRole, TContext, [DynamicallyAccessedMembers(Dynam
     {
         ThrowIfDisposed();
         ArgumentNullException.ThrowIfNull(user);
-        return UserClaims.Any() ?
+        return await UserClaims.AnyAsync(cancellationToken: cancellationToken) ?
             await UserClaims.Where(uc => uc.UserId.Equals(user.Id)).Select(c => c.ToClaim()).ToListAsync(cancellationToken) :
             [];
     }

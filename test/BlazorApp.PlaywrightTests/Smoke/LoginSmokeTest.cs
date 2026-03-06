@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
-using Devpro.TodoList.BlazorApp.PlaywrightTests.Hosting;
 using Withywoods.AspNetCore.Mvc.Testing;
 using Xunit;
 
