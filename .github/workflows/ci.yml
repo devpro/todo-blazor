@@ -62,7 +62,7 @@ jobs:
       extra-vars: |
         Application__IsHttpsRedirectionEnabled="false"
       fossa-enabled: false
-      sonar-enabled: true
+      sonar-enabled: ${{ vars.SONAR_ORG != '' }}
       sonar-organization: ${{ vars.SONAR_ORG }}
       sonar-project-key: ${{ vars.SONAR_PROJECT_KEY }}
       sonar-project-name: Todo Blazor

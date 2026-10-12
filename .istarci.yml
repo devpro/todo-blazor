@@ -5,6 +5,7 @@ runner:
   images:
     "git-check*": ghcr.io/devpro/debian-node:latest
     "markup-lint*": ghcr.io/devpro/debian-node:latest
+    "image-scan*": ghcr.io/devpro/debian-node:latest
   # The scan job builds an image and scans it through the host Docker daemon.
   docker: true
 
@@ -14,4 +15,7 @@ workflow:
 
 # Repository variables the pipeline reads, which a local run otherwise gets as placeholders, and an image tag refuses the uppercase in one.
 vars:
+  # A local run holds no Sonar token, so an empty organization is what turns the analysis off there.
+  SONAR_ORG: ""
+  CONTAINER_IMAGE_NAME: todo-blazor
   CONTAINER_REGISTRY_PATH: devprofr
