@@ -3,6 +3,8 @@
 runner:
   image: ghcr.io/devpro/ubuntu-dotnet:latest
   images:
+    # The browser tests need the system libraries Chromium loads, which only this image carries.
+    "code-quality*": ghcr.io/devpro/ubuntu-dotnet-playwright:latest
     "git-check*": ghcr.io/devpro/debian-node:latest
     "markup-lint*": ghcr.io/devpro/debian-node:latest
     "image-scan*": ghcr.io/devpro/debian-node:latest
