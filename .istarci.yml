@@ -9,7 +9,7 @@ runner:
     "markup-lint*": ghcr.io/devpro/debian-node:latest
     "image-scan*": ghcr.io/devpro/debian-node:latest
   # The scan job builds an image and scans it through the host Docker daemon.
-  docker: true
+  docker: ["image-scan*"]
   # The analysis runs against the SonarQube IstarCI starts on this machine, with a token made there.
   sonarqube: true
 
