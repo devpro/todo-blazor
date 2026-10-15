@@ -25,8 +25,8 @@ RUN --mount=type=secret,id=additional_file_name,env=ADDITIONAL_FILE_NAME \
         echo "$ADDITIONAL_FILE_CONTENT" > "/app/publish/${ADDITIONAL_FILE_NAME}"; \
     fi
 
-FROM registry.suse.com/bci/python:3.13 AS otel-fetch
-ARG OTEL_VERSION=1.14.1
+FROM registry.suse.com/bci/python:3.14 AS otel-fetch
+ARG OTEL_VERSION=1.17.0
 WORKDIR /tmp
 ADD --chmod=644 \
     https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/checksums.txt \
