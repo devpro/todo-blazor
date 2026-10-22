@@ -1,4 +1,4 @@
-﻿# Todo Blazor (Web Application)
+# Todo Blazor (Web Application)
 
 [![CI](https://github.com/devpro/todo-blazor/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/devpro/todo-blazor/actions/workflows/ci.yml)
 [![PKG](https://github.com/devpro/todo-blazor/actions/workflows/pkg.yml/badge.svg?branch=main)](https://github.com/devpro/todo-blazor/actions/workflows/pkg.yml)
@@ -14,7 +14,7 @@ For development details, see [CONTRIBUTING.md](CONTRIBUTING.md) - contributions 
 Start the database:
 
 ```bash
-docker run --name mongodb8 -d -p 27017:27017 mongo:8.2
+docker run --name mongodb9 -d -p 27017:27017 mongo:9.0
 ```
 
 Run the web application:

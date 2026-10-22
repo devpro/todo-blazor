@@ -9,7 +9,7 @@
     - Run in a container (assuming Docker is present):
 
       ```bash
-      docker run --name mongodb8 -d -p 27017:27017 mongo:8.2
+      docker run --name mongodb9 -d -p 27017:27017 mongo:9.0
       ```
 
 2. Web application (Blazor / .NET / C#)
