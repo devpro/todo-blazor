@@ -1,4 +1,4 @@
-﻿Feature: User authentication
+Feature: User authentication
 
   Scenario: Login failure on unknown credentials
     Given I navigate to the home page

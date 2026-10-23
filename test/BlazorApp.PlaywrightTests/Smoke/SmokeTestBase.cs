@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Bogus;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;

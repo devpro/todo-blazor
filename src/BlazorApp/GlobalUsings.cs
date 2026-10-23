@@ -1,4 +1,4 @@
-﻿global using Devpro.TodoList.BlazorApp.Components;
+global using Devpro.TodoList.BlazorApp.Components;
 global using Devpro.TodoList.BlazorApp.Components.Account;
 global using Devpro.TodoList.BlazorApp.Configuration;
 global using Devpro.TodoList.BlazorApp.DependencyInjection;

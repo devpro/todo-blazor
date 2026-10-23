@@ -1,4 +1,4 @@
-﻿// hack: overrides https://github.com/dotnet/dotnet/blob/main/src/aspnetcore/src/Identity/EntityFrameworkCore/src/RoleStore.cs to make it work with MongoDB EF Provider
+// hack: overrides https://github.com/dotnet/dotnet/blob/main/src/aspnetcore/src/Identity/EntityFrameworkCore/src/RoleStore.cs to make it work with MongoDB EF Provider
 #pragma warning disable S2436
 using MongoDB.Bson;
 

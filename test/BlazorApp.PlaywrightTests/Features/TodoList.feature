@@ -1,4 +1,4 @@
-﻿Feature: Todo Management
+Feature: Todo Management
 
 Background:
   Given I am a new user

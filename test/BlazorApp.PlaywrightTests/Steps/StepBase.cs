@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Bogus;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Pages;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Support;

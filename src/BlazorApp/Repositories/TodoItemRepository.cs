@@ -1,4 +1,4 @@
-﻿using Devpro.TodoList.BlazorApp.Models;
+using Devpro.TodoList.BlazorApp.Models;
 using MongoDB.Driver;
 
 namespace Devpro.TodoList.BlazorApp.Repositories;

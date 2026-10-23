@@ -1,4 +1,4 @@
-﻿namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
+namespace Devpro.TodoList.BlazorApp.PlaywrightTests.Support;
 
 public static class ScenarioContextKeys
 {

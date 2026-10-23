@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Aspects;
 using Withywoods.AspNetCore.Mvc.Testing;
 using Xunit;

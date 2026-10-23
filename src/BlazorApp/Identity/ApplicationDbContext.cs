@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.EntityFrameworkCore.Extensions;
 
