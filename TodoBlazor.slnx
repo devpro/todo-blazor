@@ -18,7 +18,6 @@
   <Folder Name="/Solution Items/pipelines/">
     <File Path=".github/workflows/ci.yml" />
     <File Path=".github/workflows/pkg.yml" />
-    <File Path=".github/workflows/reusable-git-check.yml" />
   </Folder>
   <Project Path="src/BlazorApp/BlazorApp.csproj" />
   <Project Path="test/BlazorApp.IntegrationTests/BlazorApp.IntegrationTests.csproj" Id="b9481220-a5c1-41e1-b51f-02f0f0d19191" />
