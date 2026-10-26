@@ -3,7 +3,7 @@
     <File Path=".dockerignore" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
-    <File Path=".markdownlint.yml" />
+    <File Path=".markdownlint-cli2.yaml" />
     <File Path=".yamllint.yaml" />
     <File Path="compose.override.yaml" />
     <File Path="compose.yaml" />
