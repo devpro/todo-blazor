@@ -1,4 +1,4 @@
-﻿using Withywoods.Configuration;
+using Withywoods.Configuration;
 
 namespace Devpro.TodoList.BlazorApp.Configuration;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Devpro.TodoList.BlazorApp.PlaywrightTests.Smoke;
 using Metalama.Framework.Aspects;

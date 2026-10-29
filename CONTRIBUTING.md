@@ -9,7 +9,7 @@
     - Run in a container (assuming Docker is present):
 
       ```bash
-      docker run --name mongodb8 -d -p 27017:27017 mongo:8.2
+      docker run --name mongodb9 -d -p 27017:27017 mongo:9.0
       ```
 
 2. Web application (Blazor / .NET / C#)
@@ -244,3 +244,8 @@ dotnet tool restore
 dotnet ef database update
 dotnet run
 ```
+
+## Run the pipeline locally
+
+[IstarCI](https://github.com/devpro/istarci) runs the GitHub Actions pipeline in Docker before the push.
+`istarci add` and `istarci install-hook` set it up for this repository.
